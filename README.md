@@ -10,7 +10,7 @@ unzip and move all `.mat` files to `/dataset/ZuCo/task1-SR/Matlab_files`,`/datas
 run `bash ./scripts/prepare_dataset.sh` to preprocess `.mat` files and prepare sentiment labels. 
 
 For each task, all `.mat` files will be converted into one `.pickle` file stored in `/dataset/ZuCo/<task_name>/<task_name>-dataset.pickle`. 
-
+[data.py](data.py)
 Sentiment dataset for ZuCo (`sentiment_labels.json`) will be stored in `/dataset/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json`. 
 
 Sentiment dataset for filtered Stanford Sentiment Treebank will be stored in `/dataset/stanfordsentiment/ternary_dataset.json`

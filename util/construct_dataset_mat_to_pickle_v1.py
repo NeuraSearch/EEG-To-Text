@@ -8,19 +8,19 @@ import numpy as np
 import pickle
 import argparse
 
-parser = argparse.ArgumentParser(description='Specify task name for converting ZuCo v1.0 Mat file to Pickle')
-parser.add_argument('-t', '--task_name', help='name of the task in /dataset/ZuCo, choose from {task1-SR,task2-NR,task3-TSR}', required=True)
-args = vars(parser.parse_args())
+#parser = argparse.ArgumentParser(description='Specify task name for converting ZuCo v1.0 Mat file to Pickle')
+#parser.add_argument('-t', '--task_name', help='name of the task in /dataset/ZuCo, choose from {task1-SR,task2-NR,task3-TSR}', required=True)
+#args = vars(parser.parse_args())
 
 
 """config"""
 version = 'v1' # 'old'
 # version = 'v2' # 'new'
 
-task_name = args['task_name']
-# task_name = 'task1-SR'
-# task_name = 'task2-NR'
-# task_name = 'task3-TSR'
+#task_name = args['task_name']
+#task_name = 'task1-SR'
+#task_name = 'task2-NR'
+task_name = 'task3-TSR'
 
 
 print('##############################')
@@ -39,7 +39,7 @@ if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 """load files"""
-mat_files = glob(os.path.join(input_mat_files_dir,'*.mat'))
+mat_files = glob(os.path.join(rf'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\dataset\ZuCo\{task_name}\Matlab_files','*.mat'))
 mat_files = sorted(mat_files)
 
 if len(mat_files) == 0:
