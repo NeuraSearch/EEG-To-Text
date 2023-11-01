@@ -6,14 +6,15 @@ from torch.utils.data import Dataset, DataLoader
 import json
 import matplotlib.pyplot as plt
 from glob import glob
-from transformers import BartTokenizer, BertTokenizer
+#from transformers import BartTokenizer, BertTokenizer
 from tqdm import tqdm
-from fuzzy_match import match
-from fuzzy_match import algorithims
+#from fuzzy_match import match
+#from fuzzy_match import algorithims
 
 # macro
-ZUCO_SENTIMENT_LABELS = json.load(open('./dataset/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json'))
-SST_SENTIMENT_LABELS = json.load(open('./dataset/stanfordsentiment/ternary_dataset.json'))
+#TODO change these back after running v2
+#ZUCO_SENTIMENT_LABELS = json.load(open('./dataset/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json'))
+#SST_SENTIMENT_LABELS = json.load(open('./dataset/stanfordsentiment/ternary_dataset.json'))
 
 def normalize_1d(input_tensor):
     # normalize a 1d tensor

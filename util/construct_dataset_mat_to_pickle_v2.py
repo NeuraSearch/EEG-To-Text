@@ -121,7 +121,7 @@ if dataset_dict == {}:
     print(f'No mat file found for {task_name}')
     quit()
 
-output_dir = f'./dataset/ZuCo/{task_name}/pickle'
+output_dir = r'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\util\dataset\ZuCo\task2-NR-2.0\pickle/'
 # with open(os.path.join(output_dir,'task1-SR-dataset.json'), 'w') as out:
 #     json.dump(dataset_dict,out,indent = 4)
 
