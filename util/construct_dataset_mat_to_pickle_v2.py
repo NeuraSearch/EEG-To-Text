@@ -9,7 +9,7 @@ import pickle
 
 task = "NR"
 
-rootdir = r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\dataset\ZuCo\task2-NR-2.0\Matlab_files/"
+rootdir = "C:/Users/gxb18167/PycharmProjects/EEG-To-Text/dataset/ZuCo/task2-NR-2.0/Matlab_files/"
 
 print('##############################')
 print(f'start processing ZuCo task2-NR-2.0...')
@@ -21,13 +21,14 @@ for file in tqdm(os.listdir(rootdir)):
 
         file_name = rootdir + file
 
-        # print('file name:', file_name)
-        subject = file_name.split("ts")[1].split("_")[0]
-        # print('subject: ', subject)
+        print('file name:', file_name)
+        subject = file.split("ts")[1].split("_")[0]
+
+        print('subject: ', subject)
 
         # exclude YMH due to incomplete data because of dyslexia
         #if subject != 'YMH':
-        #assert subject not in dataset_dict
+        assert subject not in dataset_dict
         dataset_dict[subject] = []
 
         f = h5py.File(file_name,'r')
@@ -121,13 +122,19 @@ if dataset_dict == {}:
     print(f'No mat file found for {task_name}')
     quit()
 
-output_dir = r'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\util\dataset\ZuCo\task2-NR-2.0\pickle/'
+
 # with open(os.path.join(output_dir,'task1-SR-dataset.json'), 'w') as out:
 #     json.dump(dataset_dict,out,indent = 4)
 
-with open(os.path.join(output_dir), 'wb') as handle:
+output_dir = f'./dataset/ZuCo/{task_name}/pickle'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
+output_name = f'{task_name}-dataset.pickle'
+
+with open(os.path.join(output_dir,output_name), 'wb') as handle:
     pickle.dump(dataset_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    print('write to:', os.path.join(output_dir))
+    print('write to:', os.path.join(output_dir,output_name))
 
 """sanity check"""
 print('subjects:', dataset_dict.keys())
