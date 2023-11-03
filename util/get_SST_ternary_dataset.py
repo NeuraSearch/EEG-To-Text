@@ -129,15 +129,15 @@ def get_SST_dataset(SST_dir_path, ZuCo_used_sentences, ZUCO_SENTIMENT_LABELS):
             temp.write('\t'+matched_pair[1]+'\n')
             temp.write('\n')
 
-    with open('./dataset/stanfordsentiment/ternary_dataset.json', 'w') as out:
+    with open(r'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\dataset\stanfordsentiment\stanfordSentimentTreebank\ternary_dataset.json', 'w') as out:
         json.dump(filtered_ternary_dataset,out, indent = 4)
     print('write json to /dataset/stanfordsentiment/ternary_dataset.json')
 
 if __name__ == '__main__':
     print('##############################')
     print('start generating stanfordSentimentTreebank ternary sentiment dataset...')
-    SST_dir_path = './dataset/stanfordsentiment/stanfordSentimentTreebank'
-    ZuCo_task1_csv_path = './dataset/ZuCo/task_materials/sentiment_labels_task1.csv'
-    ZUCO_SENTIMENT_LABELS = json.load(open('./dataset/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json'))
+    SST_dir_path = r'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\dataset\stanfordsentiment\stanfordSentimentTreebank'
+    ZuCo_task1_csv_path = r'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\dataset\ZuCo\task_materials\sentiment_labels_task1.csv'
+    ZUCO_SENTIMENT_LABELS = json.load(open(r'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\dataset\ZuCo\task1-SR\sentiment_labels\sentiment_labels.json'))
 
     get_SST_dataset(SST_dir_path, ZuCo_task1_csv_path, ZUCO_SENTIMENT_LABELS)

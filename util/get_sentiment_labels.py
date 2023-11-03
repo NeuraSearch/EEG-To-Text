@@ -6,7 +6,7 @@ print('##############################')
 print('start generating ZuCo task1-SR sentiment labels...')
 
 
-sentiment_labels_task1_csv_path = './dataset/ZuCo/task_materials/sentiment_labels_task1.csv'
+sentiment_labels_task1_csv_path = r'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\dataset\ZuCo\task_materials\sentiment_labels_task1.csv'
 
 sentiment_labels = {}
 with open(sentiment_labels_task1_csv_path, 'r') as f:
@@ -23,6 +23,6 @@ with open(sentiment_labels_task1_csv_path, 'r') as f:
             label = int(parsed_line[-1].strip())
             sentiment_labels[sent_text] = label
 
-with open('./dataset/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json', 'w') as out:
+with open(r'C:\Users\gxb18167\PycharmProjects\EEG-To-Text\dataset\ZuCo\task1-SR\sentiment_labels\sentiment_labels.json', 'w') as out:
     json.dump(sentiment_labels,out,indent = 4)
     print('write to ./dataset/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json')
