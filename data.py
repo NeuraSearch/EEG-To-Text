@@ -37,6 +37,7 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
         return_tensor = torch.from_numpy(word_eeg_embedding)
         return normalize_1d(return_tensor)
 
+    #TODO Here is where the create the function to get the sentence level EEG embedding
     def get_sent_eeg(sent_obj, bands):
         sent_eeg_features = []
         for band in bands:
@@ -54,6 +55,7 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
     input_sample = {}
     # get target label
     target_string = sent_obj['content']
+
     target_tokenized = tokenizer(target_string, padding='max_length', max_length=max_len, truncation=True, return_tensors='pt', return_attention_mask = True)
     
     input_sample['target_ids'] = target_tokenized['input_ids'][0]
@@ -85,6 +87,7 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
         word_embeddings.append(torch.ones(105*len(bands)))
 
     for word in sent_obj['word']:
+        #print("Word level value:", word)
         # add each word's EEG embedding as Tensors
         word_level_eeg_tensor = get_word_embedding_eeg_tensor(word, eeg_type, bands = bands)
         # check none, for v2 dataset
@@ -145,15 +148,18 @@ class ZuCo_dataset(Dataset):
         if not isinstance(input_dataset_dicts,list):
             input_dataset_dicts = [input_dataset_dicts]
         print(f'[INFO]loading {len(input_dataset_dicts)} task datasets')
+        #iterates through each task dataset in the list
         for input_dataset_dict in input_dataset_dicts:
             if subject == 'ALL':
                 subjects = list(input_dataset_dict.keys())
                 print('[INFO]using subjects: ', subjects)
             else:
                 subjects = [subject]
-            
+
+            #Determines the total number of sentences on a per subject basis?
             total_num_sentence = len(input_dataset_dict[subjects[0]])
-            
+
+            #train divider, on a per sentence count basis, 80% for training, 10% for dev, 10% for test
             train_divider = int(0.8*total_num_sentence)
             dev_divider = train_divider + int(0.1*total_num_sentence)
             
@@ -164,10 +170,13 @@ class ZuCo_dataset(Dataset):
                 # take first 80% as trainset, 10% as dev and 10% as test
                 if phase == 'train':
                     print('[INFO]initializing a train set...')
+                    #iterates through each subject, takes 80% of that subjects sentence, and adds it to the input list
                     for key in subjects:
                         for i in range(train_divider):
+                            #get_input_sample takes in each sentence dictionary
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
                             if input_sample is not None:
+                                #appends each subjects input sample to the input list
                                 self.inputs.append(input_sample)
                 elif phase == 'dev':
                     print('[INFO]initializing a dev set...')
