@@ -48,6 +48,7 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
         return_tensor = torch.from_numpy(sent_eeg_embedding)
         return normalize_1d(return_tensor)
 
+    #TODO Note important none handling!
     if sent_obj is None:
         # print(f'  - skip bad sentence')   
         return None
