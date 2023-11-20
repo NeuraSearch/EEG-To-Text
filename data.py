@@ -35,6 +35,7 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
             return None
         # assert len(word_eeg_embedding) == 105*len(bands)
         return_tensor = torch.from_numpy(word_eeg_embedding)
+
         return normalize_1d(return_tensor)
 
     #TODO Here is where the create the function to get the sentence level EEG embedding
@@ -56,10 +57,12 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
     input_sample = {}
     # get target label
     target_string = sent_obj['content']
+    print(target_string)
 
     target_tokenized = tokenizer(target_string, padding='max_length', max_length=max_len, truncation=True, return_tensors='pt', return_attention_mask = True)
     
     input_sample['target_ids'] = target_tokenized['input_ids'][0]
+    #print(input_sample['target_ids'])
     
     # get sentence level EEG features
     sent_level_eeg_tensor = get_sent_eeg(sent_obj, bands)
