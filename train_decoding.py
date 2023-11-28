@@ -206,7 +206,7 @@ if __name__ == '__main__':
     # CUDA_VISIBLE_DEVICES=0,1,2,3  
     device = torch.device(dev)
     print(f'[INFO]using device {dev}')
-    print()
+
 
     ''' set up dataloader '''
     whole_dataset_dicts = []
@@ -227,7 +227,7 @@ if __name__ == '__main__':
         with open(dataset_path_taskNRv2, 'rb') as handle:
             whole_dataset_dicts.append(pickle.load(handle))
 
-    print()
+
 
     """save config"""
     #with open(f'./config/decoding/{save_name}.json', 'w') as out_config:
@@ -338,7 +338,7 @@ if __name__ == '__main__':
     ''' set up loss function '''
     criterion = nn.CrossEntropyLoss()
     
-    print()
+
     print('=== start Step2 training ... ===')
     # print training layers
     show_require_grad_layers(model)

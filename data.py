@@ -57,7 +57,6 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
     input_sample = {}
     # get target label
     target_string = sent_obj['content']
-    print(target_string)
 
     target_tokenized = tokenizer(target_string, padding='max_length', max_length=max_len, truncation=True, return_tensors='pt', return_attention_mask = True)
     
@@ -310,10 +309,10 @@ if __name__ == '__main__':
         with open(dataset_path_task2_v2, 'rb') as handle:
             whole_dataset_dicts.append(pickle.load(handle))
 
-        print()
+
         for key in whole_dataset_dicts[0]:
             print(f'task2_v2, sentence num in {key}:',len(whole_dataset_dicts[0][key]))
-        print()
+
 
         tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
         dataset_setting = 'unique_sent'
