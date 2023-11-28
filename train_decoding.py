@@ -20,7 +20,7 @@ from data import ZuCo_dataset
 from model_decoding import BrainTranslator, BrainTranslatorNaive
 from config import get_config
 
-def train_model(dataloaders, device, model, criterion, optimizer, scheduler, num_epochs=25, checkpoint_path_best = '/users/gxb18167/Datasets/checkpoints/decoding/best/temp_decoding.pt', checkpoint_path_last = '/users/gxb18167/Datasets/checkpoints/decoding/last/temp_decoding.pt'):
+def train_model(dataloaders, device, model, criterion, optimizer, scheduler, num_epochs=25, checkpoint_path_best = '/users/gxb18167/Datasets/Checkpoints/train_decoding/best/temp_decoding.pt', checkpoint_path_last = '/users/gxb18167/Datasets/Checkpoints/train_decoding/last/temp_decoding.pt'):
     # modified from: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
     since = time.time()
       
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     # task_name = 'task1_task2_taskNRv2'
     task_name = args['task_name']
 
-    save_path = "/users/gxb18167/Datasets/checkpoints/decoding"
+    save_path = "/users/gxb18167/Datasets/Checkpoints/train_decoding"
 
     skip_step_one = args['skip_step_one']
     load_step1_checkpoint = args['load_step1_checkpoint']
