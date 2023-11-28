@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 # macro
 ZUCO_SENTIMENT_LABELS = json.load(open('/users/gxb18167/Datasets/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json'))
-SST_SENTIMENT_LABELS = json.load(open('/users/gxb18167/EEG-To-Text/datasets/stanfordsentiment/stanfordSentimentTreebank/ternary_dataset.json'))
+SST_SENTIMENT_LABELS = json.load(open('/users/gxb18167/EEG-To-Text/dataset/stanfordsentiment/stanfordSentimentTreebank/ternary_dataset.json'))
 
 def normalize_1d(input_tensor):
     # normalize a 1d tensor
