@@ -1,0 +1,71 @@
+[INFO]subjects: ALL
+[INFO]eeg type: GD
+[INFO]using bands: ['_t1', '_t2', '_a1', '_a2', '_b1', '_b2', '_g1', '_g2']
+[INFO]using device cuda:0
+
+[INFO]loading 3 task datasets
+[INFO]using subjects:  ['ZAB', 'ZDM', 'ZDN', 'ZGW', 'ZJM', 'ZJN', 'ZJS', 'ZKB', 'ZKH', 'ZMG', 'ZPH']
+train divider = 320
+dev divider = 360
+[INFO]initializing a test set...
+++ adding task to dataset, now we have: 416
+[INFO]using subjects:  ['ZAB', 'ZDM', 'ZDN', 'ZGW', 'ZJM', 'ZJN', 'ZJS', 'ZKB', 'ZKH', 'ZKW', 'ZMG', 'ZPH']
+train divider = 240
+dev divider = 270
+[INFO]initializing a test set...
+discard length zero instance:  He was the son of a blacksmith Timothy Bush, Jr. and Lydia Newcomb and was born in Penfield, Monroe Co., New York on January 28, 1797.
+discard length zero instance:  Mary Lilian Baels (November 28, 1916 - June 7, 2002) was best known as Princess de Ruthy, the controversial morganatic second wife of King Leopold III of the Belgians.
+++ adding task to dataset, now we have: 766
+[INFO]using subjects:  ['YAC', 'YAG', 'YAK', 'YDG', 'YDR', 'YFR', 'YFS', 'YHS', 'YIS', 'YLS', 'YMD', 'YMS', 'YRH', 'YRK', 'YRP', 'YSD', 'YSL', 'YTL']
+train divider = 279
+dev divider = 313
+[INFO]initializing a test set...
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+expect word eeg embedding dim to be 840, but got 0, return None
+++ adding task to dataset, now we have: 1367
+[INFO]input tensor size: torch.Size([56, 840])
+
+[INFO]test_set size:  1367
+test loss: 3.419939
+corpus BLEU-1 score: 0.40674393017198573
+corpus BLEU-2 score: 0.23430984253255077
+corpus BLEU-3 score: 0.1313217895681861
+corpus BLEU-4 score: 0.07458354693187516
+
+{'rouge-1': {'r': 0.2831447526651331, 'p': 0.3442785823384381, 'f': 0.3097433189710625}, 'rouge-2': {'r': 0.07689223885257694, 'p': 0.08494451836352211, 'f': 0.08060316053970343}, 'rouge-l': {'r': 0.26619695446668673, 'p': 0.32346599140709265, 'f': 0.2911252428400254}}
+===================================================================================
+SLURM job 10245150 ended:     Wed Nov 29 15:19:48 GMT 2023 (Unix Epoch time: 1701271188)
+This is an estimated end time using the 'date' command from node gpu01.hpc.strath.ac.uk
+For accurate timings, use 'sacct -j 10245150 -X --format=Submit,Start,End,Elapsed'
+======================================================================================
