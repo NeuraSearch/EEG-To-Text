@@ -20,7 +20,7 @@ from nltk.translate.bleu_score import sentence_bleu, corpus_bleu
 from rouge import Rouge
 from config import get_config
 
-def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_results_path = './results/temp.txt' ):
+def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_results_path = '/users/gxb18167/Datasets/Checkpoints/train_decoding/results/temp.txt' ):
     # modified from: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
 
     model.eval()   # Set model to evaluate mode
@@ -149,7 +149,7 @@ if __name__ == '__main__':
     # model_name = 'BrainTranslator'
     # model_name = 'BrainTranslatorNaive'
 
-    output_all_results_path = f'./results/{task_name}-{model_name}-all_decoding_results.txt'
+    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/results/{task_name}-{model_name}-all_decoding_results.txt'
     ''' set random seeds '''
     seed_val = 312
     np.random.seed(seed_val)
@@ -171,19 +171,19 @@ if __name__ == '__main__':
     ''' set up dataloader '''
     whole_dataset_dicts = []
     if 'task1' in task_name:
-        dataset_path_task1 = './dataset/ZuCo/task1-SR/pickle/task1-SR-dataset.pickle' 
+        dataset_path_task1 = '/users/gxb18167/Datasets/ZuCo/task1-SR/pickle/task1-SR-dataset.pickle'
         with open(dataset_path_task1, 'rb') as handle:
             whole_dataset_dicts.append(pickle.load(handle))
     if 'task2' in task_name:
-        dataset_path_task2 = './dataset/ZuCo/task2-NR/pickle/task2-NR-dataset.pickle' 
+        dataset_path_task2 = '/users/gxb18167/Datasets/ZuCo/task2-NR/pickle/task2-NR-dataset.pickle'
         with open(dataset_path_task2, 'rb') as handle:
             whole_dataset_dicts.append(pickle.load(handle))
     if 'task3' in task_name:
-        dataset_path_task3 = './dataset/ZuCo/task3-TSR/pickle/task3-TSR-dataset.pickle' 
+        dataset_path_task3 = '/users/gxb18167/Datasets/ZuCo/task3-TSR/pickle/task3-TSR-dataset.pickle'
         with open(dataset_path_task3, 'rb') as handle:
             whole_dataset_dicts.append(pickle.load(handle))
     if 'taskNRv2' in task_name:
-        dataset_path_taskNRv2 = './dataset/ZuCo/task2-NR-2.0/pickle/task2-NR-2.0-dataset.pickle' 
+        dataset_path_taskNRv2 = '/users/gxb18167/Datasets/ZuCo/task2-NR-2.0/pickle/task2-NR-2.0-dataset.pickle'
         with open(dataset_path_taskNRv2, 'rb') as handle:
             whole_dataset_dicts.append(pickle.load(handle))
     print()
