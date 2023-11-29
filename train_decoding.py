@@ -230,7 +230,7 @@ if __name__ == '__main__':
 
 
     """save config"""
-    with open(f'/users/gxb18167/EEG-To-Text/config/decoding/{save_name}.json', 'w') as out_config:
+    with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{save_name}.json', 'w') as out_config:
         json.dump(args, out_config, indent = 4)
 
 
