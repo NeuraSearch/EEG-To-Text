@@ -2,6 +2,12 @@ import os
 import numpy as np
 import torch
 import pickle
+import torch
+import torch.nn as nn
+
+from gensim.models import Word2Vec
+
+import generate_samples
 from torch.utils.data import Dataset, DataLoader
 import json
 import matplotlib.pyplot as plt
@@ -150,10 +156,98 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
 
     return input_sample
 
+if torch.cuda.is_available():
+    device = torch.device("cuda:0")
+else:
+    device = "cpu"
+
+class Generator(nn.Module):
+    def __init__(self, noise_dim, word_embedding_dim):
+        super(Generator, self).__init__()
+
+        self.noise_dim = noise_dim
+        self.word_embedding_dim = word_embedding_dim
+
+        # Define the layers of your generator
+        self.fc_noise = nn.Linear(noise_dim, 105*8)  # Increase the size for more complexity
+        self.fc_word_embedding = nn.Linear(word_embedding_dim, 105*8)  # Increase the size for more complexity
+        self.conv1 = nn.Conv2d(2, 128, kernel_size=3, stride=1, padding=1)
+        self.bn1 = nn.BatchNorm2d(128)
+        self.relu = nn.LeakyReLU(0.2)
+
+        self.conv2 = nn.Conv2d(128, 64, kernel_size=3, stride=1, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
+
+        self.conv3 = nn.Conv2d(64, 1, kernel_size=3, stride=1, padding=1)
+        self.tanh = nn.Tanh()
+
+    def forward(self, noise, word_embedding):
+        # Process noise
+        noise = self.fc_noise(noise)
+        noise = noise.view(noise.size(0), 1, 105,8)  # Adjust the size to match conv1
+
+        # Process word embedding
+        word_embedding = self.fc_word_embedding(word_embedding.to(device))
+        word_embedding = word_embedding.view(word_embedding.size(0), 1, 105, 8)  # Adjust the size to match conv1
+
+        # Concatenate noise and word embedding
+        combined_input = torch.cat([noise, word_embedding], dim=1)
+
+        # Upsample and generate the output
+        z = self.conv1(combined_input)
+        z = self.bn1(z)
+        z = self.relu(z)
+
+        z = self.conv2(z)
+        z = self.bn2(z)
+        z = self.relu(z)
+
+        z = self.conv3(z)
+        z = self.tanh(z)
+
+        return z
+
 class ZuCo_dataset(Dataset):
+    def create_word_label_embeddings(self, Word_Labels_List, word_embedding_dim=50):
+        tokenized_words = []
+        for i in range(len(Word_Labels_List)):
+            tokenized_words.append([Word_Labels_List[i]])
+        model = Word2Vec(sentences=tokenized_words, vector_size=word_embedding_dim, window=5, min_count=1, workers=4)
+        word_embeddings = {word: model.wv[word] for word in model.wv.index_to_key}
+        print("Number of word embeddings:", len(word_embeddings))
+        # word, embedding = list(word_embeddings.items())[10]
+        # print(f"Word: {word}, Embedding: {embedding}")
+
+        Embedded_Word_labels = []
+        for word in Word_Labels_List:
+            Embedded_Word_labels.append(word_embeddings[word])
+
+        return Embedded_Word_labels, word_embeddings
+
     def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False):
         self.inputs = []
         self.tokenizer = tokenizer
+
+        with open(r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\SIGIR_Development\EEG-GAN\EEG_Text_Pairs.pkl",
+                  'rb') as file:
+            EEG_word_level_embeddings = pickle.load(file)
+            EEG_word_level_labels = pickle.load(file)
+
+
+        word_embedding_dim = 50
+        z_size = 100
+        output_shape = (1, 105, 8)
+
+        gen_model = Generator(z_size, word_embedding_dim)  # Replace with your actual generator model class
+        checkpoint = torch.load(
+            r"I:\Science\CIS-YASHMOSH\niallmcguire\WGAN_Text_2.0\Textual_WGAN_GP_checkpoint_epoch_100.pt",
+            map_location=torch.device('cpu'))
+        # Load the model's state_dict onto the CPU
+        gen_model.load_state_dict(checkpoint['gen_model_state_dict'])
+        # Set the model to evaluation mode
+        gen_model.eval()
+
+        Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         augmentation_factor = 0.1
 
@@ -190,13 +284,14 @@ class ZuCo_dataset(Dataset):
                         for i in range(train_divider):
                             #get_input_sample takes in each sentence dictionary
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
+                            #print(len(input_sample))
 
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
                                 self.inputs.append(input_sample)
                                 if augmentation_counter < augmentation_size:
-                                    input_sample_synthetic = input_sample['input_embeddings_labels']
-                                    print(input_sample_synthetic)
+                                    input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
+                                    self.inputs.append(input_sample_synthetic)
                                     augmentation_counter += 1
                 elif phase == 'dev':
                     print('[INFO]initializing a dev set...')

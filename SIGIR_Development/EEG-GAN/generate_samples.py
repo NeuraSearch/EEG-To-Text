@@ -122,30 +122,14 @@ class Generator(nn.Module):
 
         return z
 
-def generate_synthetic_samples(input_sample):
+def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
     word_embedding_dim = 50
     z_size = 100
     output_shape = (1, 105, 8)
-    input_embeddings_labels = input_sample[-1]
-    original_sample_list = input_sample[0]
+    input_embeddings_labels = input_sample['input_embeddings_labels']
+    original_sample_list = input_sample['input_embeddings']
 
-    # To load the lists from the file:
-    with open(r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\SIGIR_Development\EEG-GAN\EEG_Text_Pairs.pkl",
-              'rb') as file:
-        EEG_word_level_embeddings = pickle.load(file)
-        EEG_word_level_labels = pickle.load(file)
-
-    gen_model = Generator(z_size, word_embedding_dim)  # Replace with your actual generator model class
-    checkpoint = torch.load(
-        r"I:\Science\CIS-YASHMOSH\niallmcguire\WGAN_Text_2.0\Textual_WGAN_GP_checkpoint_epoch_100.pt",
-        map_location=torch.device('cpu'))
-    # Load the model's state_dict onto the CPU
-    gen_model.load_state_dict(checkpoint['gen_model_state_dict'])
-    # Set the model to evaluation mode
-    gen_model.eval()
-
-    Embedded_Word_labels, word_embeddings = create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
-
+    input_sample = list(input_sample)
 
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
@@ -164,8 +148,12 @@ def generate_synthetic_samples(input_sample):
         synthetic_sample = synthetic_sample.resize(840)
         synthetic_EEG_samples.append(synthetic_sample)
 
-    synthetic_EEG_samples = torch.cat([synthetic_EEG_samples, original_sample_list[len(synthetic_EEG_samples):]], dim=0)
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
+
     input_sample[0] = synthetic_EEG_samples
+    input_sample = tuple(input_sample)
 
     return input_sample
 
