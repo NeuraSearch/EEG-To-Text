@@ -155,6 +155,9 @@ class ZuCo_dataset(Dataset):
         self.inputs = []
         self.tokenizer = tokenizer
 
+        augmentation_factor = 0.1
+
+
         if not isinstance(input_dataset_dicts,list):
             input_dataset_dicts = [input_dataset_dicts]
         print(f'[INFO]loading {len(input_dataset_dicts)} task datasets')
@@ -171,6 +174,8 @@ class ZuCo_dataset(Dataset):
 
             #train divider, on a per sentence count basis, 80% for training, 10% for dev, 10% for test
             train_divider = int(0.8*total_num_sentence)
+            augmentation_size = int(augmentation_factor*total_num_sentence)
+            augmentation_counter = 0
             dev_divider = train_divider + int(0.1*total_num_sentence)
             
             print(f'train divider = {train_divider}')
@@ -185,9 +190,14 @@ class ZuCo_dataset(Dataset):
                         for i in range(train_divider):
                             #get_input_sample takes in each sentence dictionary
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
+
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
                                 self.inputs.append(input_sample)
+                                if augmentation_counter < augmentation_size:
+                                    input_sample_synthetic = input_sample['input_embeddings_labels']
+                                    print(input_sample_synthetic)
+                                    augmentation_counter += 1
                 elif phase == 'dev':
                     print('[INFO]initializing a dev set...')
                     for key in subjects:
