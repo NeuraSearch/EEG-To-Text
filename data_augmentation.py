@@ -243,11 +243,7 @@ class ZuCo_dataset(Dataset):
         word_embedding_dim = 50
         z_size = 100
         output_shape = (1, 105, 8)
-
-        if torch.cuda.is_available():
-            device = torch.device("cuda:0")
-        else:
-            device = "cpu"
+        print("Device before moving tensors:", device)
 
         gen_model = Generator(z_size, word_embedding_dim)  # Replace with your actual generator model class
         checkpoint = torch.load(
