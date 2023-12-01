@@ -17,6 +17,11 @@ from tqdm import tqdm
 #from fuzzy_match import match
 #from fuzzy_match import algorithims
 
+if torch.cuda.is_available():
+    device = torch.device("cuda:0")
+else:
+    device = "cpu"
+
 # macro
 ZUCO_SENTIMENT_LABELS = json.load(open(r'/users/gxb18167/Datasets/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json'))
 SST_SENTIMENT_LABELS = json.load(open(r'/users/gxb18167/EEG-To-Text/dataset/stanfordsentiment/stanfordSentimentTreebank/ternary_dataset.json'))
@@ -187,7 +192,7 @@ class Generator(nn.Module):
         noise = noise.view(noise.size(0), 1, 105,8)  # Adjust the size to match conv1
 
         # Process word embedding
-        word_embedding = self.fc_word_embedding(word_embedding)
+        word_embedding = self.fc_word_embedding(word_embedding.to(device))
         word_embedding = word_embedding.view(word_embedding.size(0), 1, 105, 8)  # Adjust the size to match conv1
 
         # Concatenate noise and word embedding
@@ -242,7 +247,7 @@ class ZuCo_dataset(Dataset):
         gen_model = Generator(z_size, word_embedding_dim)  # Replace with your actual generator model class
         checkpoint = torch.load(
             r"/users/gxb18167/Datasets/Checkpoints/WGAN_Text_2.0/Textual_WGAN_GP_checkpoint_epoch_100.pt",
-            map_location=torch.device("cuda:0"))
+            map_location=torch.device('cuda:0'))
         # Load the model's state_dict onto the CPU
         gen_model.load_state_dict(checkpoint['gen_model_state_dict'])
         # Set the model to evaluation mode
