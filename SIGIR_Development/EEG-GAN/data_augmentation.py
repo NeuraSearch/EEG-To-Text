@@ -228,7 +228,7 @@ class ZuCo_dataset(Dataset):
         self.inputs = []
         self.tokenizer = tokenizer
 
-        with open(r"C:\Users\gxb18167\PycharmProjects\EEG-To-Text\SIGIR_Development\EEG-GAN\EEG_Text_Pairs.pkl",
+        with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
                   'rb') as file:
             EEG_word_level_embeddings = pickle.load(file)
             EEG_word_level_labels = pickle.load(file)
