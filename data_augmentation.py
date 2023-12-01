@@ -18,7 +18,7 @@ from tqdm import tqdm
 #from fuzzy_match import algorithims
 
 if torch.cuda.is_available():
-    device = torch.device("cuda:0")
+    device = torch.device("cuda")
 else:
     device = "cpu"
 
