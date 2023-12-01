@@ -74,7 +74,7 @@ def generate_samples(g_model, input_z, input_t):
     with torch.no_grad():
         g_output = g_model(input_z, input_t).to(device)
 
-    return g_output.numpy()
+    return g_output.detach().cpu().numpy()
 
 
 def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
