@@ -306,14 +306,14 @@ class ZuCo_dataset(Dataset):
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
                                 self.inputs.append(input_sample)
-                                '''
+
                                 if augmentation_counter < augmentation_size:
 
                                     input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
                                     if input_sample_synthetic is not None:
                                         self.inputs.append(input_sample_synthetic)
                                         augmentation_counter += 1
-                                '''
+
 
                 elif phase == 'dev':
                     print('[INFO]initializing a dev set...')
