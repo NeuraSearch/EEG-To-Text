@@ -82,7 +82,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     z_size = 100
     output_shape = (1, 105, 8)
     input_embeddings_labels = input_sample['input_embeddings_labels']
-    original_sample_list = input_sample['input_embeddings'].tolist()
+    original_sample_list = input_sample['input_embeddings']
 
     print("Device before moving tensors:", device)
     input_sample = list(input_sample)
