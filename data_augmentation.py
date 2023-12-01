@@ -162,9 +162,11 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
     return input_sample
 
 if torch.cuda.is_available():
-    device = torch.device("cuda:0")
+    device = torch.device("cuda")
+    torch.cuda.set_device(device)
 else:
     device = "cpu"
+    torch.cuda.set_device(device)
 
 class Generator(nn.Module):
     def __init__(self, noise_dim, word_embedding_dim):
@@ -258,7 +260,7 @@ class ZuCo_dataset(Dataset):
         Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         #change to increase or decrease the number of synthetic samples
-        augmentation_factor = 0.0
+        augmentation_factor = 0.2
 
 
         if not isinstance(input_dataset_dicts,list):

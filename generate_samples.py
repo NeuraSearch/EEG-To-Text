@@ -18,9 +18,11 @@ print(torch.__version__)
 print("GPU Available:", torch.cuda.is_available())
 
 if torch.cuda.is_available():
-    device = torch.device("cuda:0")
+    device = torch.device("cuda")
+    torch.cuda.set_device(device)
 else:
     device = "cpu"
+    torch.cuda.set_device(device)
 
 def create_word_label_embeddings(Word_Labels_List, word_embedding_dim=50):
     tokenized_words = []
