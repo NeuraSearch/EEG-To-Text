@@ -18,7 +18,7 @@ from tqdm import tqdm
 #from fuzzy_match import algorithims
 
 # macro
-ZUCO_SENTIMENT_LABELS = json.load(open(r'I:\Science\CIS-YASHMOSH\niallmcguire\ZuCo\task1-SR\sentiment_labels\sentiment_labels.json'))
+ZUCO_SENTIMENT_LABELS = json.load(open(r'/users/gxb18167/Datasets/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json'))
 SST_SENTIMENT_LABELS = json.load(open(r'/users/gxb18167/EEG-To-Text/dataset/stanfordsentiment/stanfordSentimentTreebank/ternary_dataset.json'))
 
 def normalize_1d(input_tensor):
