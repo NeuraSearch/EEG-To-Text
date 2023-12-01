@@ -72,9 +72,9 @@ def generate_samples(g_model, input_z, input_t):
     # Create random noise as input to the generator
     # Generate samples using the generator model
     with torch.no_grad():
-        g_output = g_model(input_z, input_t)
+        g_output = g_model(input_z, input_t).to(device)
 
-    return g_output.cpu().numpy()
+    return g_output.gpu().numpy()
 
 
 def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
