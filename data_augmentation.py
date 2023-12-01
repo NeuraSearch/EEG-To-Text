@@ -228,6 +228,7 @@ class ZuCo_dataset(Dataset):
         self.inputs = []
         self.tokenizer = tokenizer
 
+
         with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
                   'rb') as file:
             EEG_word_level_embeddings = pickle.load(file)
@@ -241,7 +242,7 @@ class ZuCo_dataset(Dataset):
         gen_model = Generator(z_size, word_embedding_dim)  # Replace with your actual generator model class
         checkpoint = torch.load(
             r"/users/gxb18167/Datasets/Checkpoints/WGAN_Text_2.0/Textual_WGAN_GP_checkpoint_epoch_100.pt",
-            map_location=torch.device('cpu'))
+            map_location=torch.device("cuda:0"))
         # Load the model's state_dict onto the CPU
         gen_model.load_state_dict(checkpoint['gen_model_state_dict'])
         # Set the model to evaluation mode
