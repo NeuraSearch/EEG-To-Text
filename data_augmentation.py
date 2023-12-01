@@ -229,6 +229,13 @@ class ZuCo_dataset(Dataset):
 
         return Embedded_Word_labels, word_embeddings
 
+    if torch.cuda.is_available():
+        device = torch.device("cuda:0")
+        torch.cuda.set_device(device)
+    else:
+        device = "cpu"
+        torch.cuda.set_device(device)
+
     def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False):
         self.inputs = []
         self.tokenizer = tokenizer
