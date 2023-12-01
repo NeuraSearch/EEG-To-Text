@@ -85,7 +85,6 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     original_sample_list = input_sample['input_embeddings']
 
     print("Device before moving tensors:", device)
-    input_sample = list(input_sample)
 
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
@@ -98,8 +97,6 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
 
         word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float).to(device)
         word_embedding_tensor = word_embedding_tensor.unsqueeze(0).to(device)
-
-
 
         g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
         EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
@@ -118,8 +115,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     print(type(synthetic_EEG_samples))
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0).to(device)
 
-    input_sample[0] = synthetic_EEG_samples
-    input_sample = tuple(input_sample)
+    input_sample['input_embeddings'] = synthetic_EEG_samples
 
     return input_sample
 
