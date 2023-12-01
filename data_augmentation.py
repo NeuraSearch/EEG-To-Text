@@ -265,7 +265,7 @@ class ZuCo_dataset(Dataset):
         Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         #change to increase or decrease the number of synthetic samples
-        augmentation_factor = 0.0
+        augmentation_factor = 0.2
 
 
         if not isinstance(input_dataset_dicts,list):
