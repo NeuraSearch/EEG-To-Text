@@ -187,7 +187,7 @@ class Generator(nn.Module):
         noise = noise.view(noise.size(0), 1, 105,8)  # Adjust the size to match conv1
 
         # Process word embedding
-        word_embedding = self.fc_word_embedding(word_embedding.to(device))
+        word_embedding = self.fc_word_embedding(word_embedding)
         word_embedding = word_embedding.view(word_embedding.size(0), 1, 105, 8)  # Adjust the size to match conv1
 
         # Concatenate noise and word embedding
