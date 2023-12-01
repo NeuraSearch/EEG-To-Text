@@ -93,7 +93,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
             return None
 
         word_embedding = word_embeddings[word]
-        input_z = create_noise(1, 100, "uniform")
+        input_z = create_noise(1, 100, "uniform").to(device)
 
         word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float).to(device)
         word_embedding_tensor = word_embedding_tensor.unsqueeze(0).to(device)
