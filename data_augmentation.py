@@ -255,6 +255,7 @@ class ZuCo_dataset(Dataset):
             map_location=device)
         # Load the model's state_dict onto the CPU
         gen_model.load_state_dict(checkpoint['gen_model_state_dict'])
+        gen_model.to(device)
         # Set the model to evaluation mode
         gen_model.eval()
 
