@@ -115,7 +115,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     print(type(synthetic_EEG_samples))
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0).to(device)
 
-    input_sample['input_embeddings'] = synthetic_EEG_samples
+    input_sample['input_embeddings'] = synthetic_EEG_samples.to(device)
 
     return input_sample
 
