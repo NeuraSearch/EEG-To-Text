@@ -96,7 +96,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
         input_z = create_noise(1, 100, "uniform")
 
         word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float).to(device)
-        word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
+        word_embedding_tensor = word_embedding_tensor.unsqueeze(0).to(device)
 
         g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
         EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
@@ -104,12 +104,12 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
 
         synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float).to(device)
 
-        synthetic_sample = synthetic_sample.resize(840)
+        synthetic_sample = synthetic_sample.resize(840).to(device)
         synthetic_EEG_samples.append(synthetic_sample)
 
-    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples).to(device)
     padding_samples = original_sample_list[len(synthetic_EEG_samples):]
-    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0).to(device)
 
     input_sample[0] = synthetic_EEG_samples
     input_sample = tuple(input_sample)
