@@ -18,7 +18,7 @@ print(torch.__version__)
 print("GPU Available:", torch.cuda.is_available())
 
 if torch.cuda.is_available():
-    device = torch.device("cuda")
+    device = torch.device("cuda:0")
     torch.cuda.set_device(device)
 else:
     device = "cpu"

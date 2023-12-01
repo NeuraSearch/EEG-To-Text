@@ -18,9 +18,12 @@ from tqdm import tqdm
 #from fuzzy_match import algorithims
 
 if torch.cuda.is_available():
-    device = torch.device("cuda")
+    device = torch.device("cuda:0")
+    torch.cuda.set_device(device)
 else:
     device = "cpu"
+    torch.cuda.set_device(device)
+
 
 # macro
 ZUCO_SENTIMENT_LABELS = json.load(open(r'/users/gxb18167/Datasets/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json'))
@@ -161,12 +164,7 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
 
     return input_sample
 
-if torch.cuda.is_available():
-    device = torch.device("cuda")
-    torch.cuda.set_device(device)
-else:
-    device = "cpu"
-    torch.cuda.set_device(device)
+
 
 class Generator(nn.Module):
     def __init__(self, noise_dim, word_embedding_dim):
