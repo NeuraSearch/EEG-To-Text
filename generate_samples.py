@@ -112,7 +112,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
 
     print("Device before moving tensors:", device)
     synthetic_EEG_samples = torch.stack(synthetic_EEG_samples).to(device)
-    padding_samples = original_sample_list[len(synthetic_EEG_samples):].to(device)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0).to(device)
 
     input_sample[0] = synthetic_EEG_samples
