@@ -263,7 +263,7 @@ class ZuCo_dataset(Dataset):
         Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         #change to increase or decrease the number of synthetic samples
-        augmentation_factor = 0.4
+        augmentation_factor = 0.2
 
 
         if not isinstance(input_dataset_dicts,list):
@@ -308,9 +308,8 @@ class ZuCo_dataset(Dataset):
                                 if augmentation_counter < augmentation_size:
 
                                     input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
-                                    if input_sample_synthetic is not None:
-                                        self.inputs.append(input_sample_synthetic)
-                                        augmentation_counter += 1
+                                    self.inputs.append(input_sample_synthetic)
+                                    augmentation_counter += 1
 
 
                 elif phase == 'dev':
