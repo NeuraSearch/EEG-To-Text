@@ -104,7 +104,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
 
         g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
         print("G_output location:", g_output.device)
-        g_output = g_output.detach()
+        g_output = g_output.to('cpu')
         print("G_output location:", g_output.device)
 
 
