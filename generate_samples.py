@@ -105,7 +105,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
         g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
         print("G_output location:", g_output.device)
         g_output = g_output.to('cpu')
-        print("G_output location:", g_output.device)
+        print("G_output location post:", g_output.device)
 
 
         EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
