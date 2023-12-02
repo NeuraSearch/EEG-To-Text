@@ -263,7 +263,7 @@ class ZuCo_dataset(Dataset):
         Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         #change to increase or decrease the number of synthetic samples
-        augmentation_factor = 0.4
+        augmentation_factor = 1
 
 
         if not isinstance(input_dataset_dicts,list):
@@ -282,7 +282,7 @@ class ZuCo_dataset(Dataset):
 
             #train divider, on a per sentence count basis, 80% for training, 10% for dev, 10% for test
             train_divider = int(0.8*total_num_sentence)
-            augmentation_size = int(augmentation_factor*total_num_sentence)
+            augmentation_size = int(augmentation_factor*train_divider)
             print(f'augmentation size = {augmentation_size}')
             augmentation_counter = 0
             dev_divider = train_divider + int(0.1*total_num_sentence)
@@ -316,11 +316,7 @@ class ZuCo_dataset(Dataset):
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
                             if input_sample is not None:
                                 self.inputs.append(input_sample)
-                                if augmentation_counter < augmentation_size:
-                                    input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
-                                    if input_sample_synthetic is not None:
-                                        self.inputs.append(input_sample_synthetic)
-                                        augmentation_counter += 1
+
                 elif phase == 'test':
                     print('[INFO]initializing a test set...')
                     for key in subjects:

@@ -123,6 +123,10 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
 
     input_sample['input_embeddings'] = synthetic_EEG_samples
 
+    original_sample_list = input_sample['input_embeddings']
+    print("Synthetic first sample:", input_sample['input_embeddings'][0])
+    print("Original first sample:", original_sample_list[0])
+
     return input_sample
 
 
