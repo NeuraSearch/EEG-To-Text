@@ -17,14 +17,6 @@ from tqdm import tqdm
 #from fuzzy_match import match
 #from fuzzy_match import algorithims
 
-if torch.cuda.is_available():
-    device = torch.device("cuda:0")
-    torch.cuda.set_device(device)
-else:
-    device = "cpu"
-    torch.cuda.set_device(device)
-
-
 # macro
 ZUCO_SENTIMENT_LABELS = json.load(open(r'/users/gxb18167/Datasets/ZuCo/task1-SR/sentiment_labels/sentiment_labels.json'))
 SST_SENTIMENT_LABELS = json.load(open(r'/users/gxb18167/EEG-To-Text/dataset/stanfordsentiment/stanfordSentimentTreebank/ternary_dataset.json'))
@@ -164,6 +156,12 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
 
     return input_sample
 
+if torch.cuda.is_available():
+    device = torch.device("cuda:0")
+
+else:
+    device = "cpu"
+
 
 
 class Generator(nn.Module):
@@ -229,16 +227,16 @@ class ZuCo_dataset(Dataset):
 
         return Embedded_Word_labels, word_embeddings
 
-    if torch.cuda.is_available():
-        device = torch.device("cuda:0")
-        torch.cuda.set_device(device)
-    else:
-        device = "cpu"
-        torch.cuda.set_device(device)
 
     def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False):
         self.inputs = []
         self.tokenizer = tokenizer
+
+        if torch.cuda.is_available():
+            device = torch.device("cuda:0")
+
+        else:
+            device = "cpu"
 
 
         with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
@@ -250,7 +248,7 @@ class ZuCo_dataset(Dataset):
         word_embedding_dim = 50
         z_size = 100
         output_shape = (1, 105, 8)
-        print("Device before moving tensors:", device)
+
 
         gen_model = Generator(z_size, word_embedding_dim)  # Replace with your actual generator model class
         checkpoint = torch.load(

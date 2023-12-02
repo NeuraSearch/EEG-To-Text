@@ -204,16 +204,10 @@ if __name__ == '__main__':
     else:  
         dev = "cpu"
     # CUDA_VISIBLE_DEVICES=0,1,2,3  
-    device = torch.device(dev)
-    torch.cuda.set_device(device)
+
     print(f'[INFO]using device {dev}')
 
-    if torch.cuda.is_available():
-        device = torch.device("cuda:0")
-        torch.cuda.set_device(device)
-    else:
-        device = "cpu"
-        torch.cuda.set_device(device)
+
 
     ''' set up dataloader '''
     whole_dataset_dicts = []
