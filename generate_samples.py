@@ -76,7 +76,6 @@ def generate_samples(g_model, input_z, input_t):
 def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
     if torch.cuda.is_available():
         device = torch.device("cuda:0")
-
     else:
         device = "cpu"
 
