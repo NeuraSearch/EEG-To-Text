@@ -263,7 +263,7 @@ class ZuCo_dataset(Dataset):
         Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         #change to increase or decrease the number of synthetic samples
-        augmentation_factor = 0.2
+        augmentation_factor = 0.4
 
 
         if not isinstance(input_dataset_dicts,list):
@@ -300,17 +300,14 @@ class ZuCo_dataset(Dataset):
                             #get_input_sample takes in each sentence dictionary
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
                             #print(len(input_sample))
-
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
                                 self.inputs.append(input_sample)
-
                                 if augmentation_counter < augmentation_size:
-
                                     input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
-                                    self.inputs.append(input_sample_synthetic)
-                                    augmentation_counter += 1
-
+                                    if input_sample_synthetic is not None:
+                                        self.inputs.append(input_sample_synthetic)
+                                        augmentation_counter += 1
 
                 elif phase == 'dev':
                     print('[INFO]initializing a dev set...')
@@ -319,6 +316,11 @@ class ZuCo_dataset(Dataset):
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
                             if input_sample is not None:
                                 self.inputs.append(input_sample)
+                                if augmentation_counter < augmentation_size:
+                                    input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
+                                    if input_sample_synthetic is not None:
+                                        self.inputs.append(input_sample_synthetic)
+                                        augmentation_counter += 1
                 elif phase == 'test':
                     print('[INFO]initializing a test set...')
                     for key in subjects:
