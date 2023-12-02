@@ -85,7 +85,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     input_embeddings_labels = input_sample['input_embeddings_labels']
     original_sample_list = input_sample['input_embeddings']
 
-    print("Device before moving tensors:", device)
+    #print("Device before moving tensors:", device)
 
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
@@ -100,9 +100,9 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
         word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
 
         g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
-        print("G_output location:", g_output.device)
+        #print("G_output location:", g_output.device)
         g_output = g_output.to('cpu')
-        print("G_output location post:", g_output.device)
+        #print("G_output location post:", g_output.device)
 
 
         EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
