@@ -203,6 +203,8 @@ if __name__ == '__main__':
         dev = args['cuda'] 
     else:  
         dev = "cpu"
+
+    device = torch.device(dev)
     # CUDA_VISIBLE_DEVICES=0,1,2,3  
 
     print(f'[INFO]using device {dev}')
