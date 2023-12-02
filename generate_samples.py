@@ -18,8 +18,6 @@ print(torch.__version__)
 print("GPU Available:", torch.cuda.is_available())
 
 
-
-
 def create_word_label_embeddings(Word_Labels_List, word_embedding_dim=50):
     tokenized_words = []
     for i in range(len(Word_Labels_List)):
@@ -120,8 +118,8 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
     padding_samples = original_sample_list[len(synthetic_EEG_samples):]
     padding_samples = padding_samples
-    print(type(padding_samples))
-    print(type(synthetic_EEG_samples))
+    #print(type(padding_samples))
+    #print(type(synthetic_EEG_samples))
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
     input_sample['input_embeddings'] = synthetic_EEG_samples
