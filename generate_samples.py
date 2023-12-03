@@ -85,7 +85,6 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     input_embeddings_labels = input_sample['input_embeddings_labels']
     original_sample_list = input_sample['input_embeddings']
 
-
     print("Generating Samples")
 
     synthetic_EEG_samples = []
@@ -124,9 +123,8 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
 
     input_sample['input_embeddings'] = synthetic_EEG_samples
 
-    new_input_sample = input_sample['input_embeddings']
 
-    return new_input_sample
+    return input_sample
 
 
 
