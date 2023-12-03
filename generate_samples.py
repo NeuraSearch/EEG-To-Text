@@ -85,7 +85,8 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     input_embeddings_labels = input_sample['input_embeddings_labels']
     original_sample_list = input_sample['input_embeddings']
 
-    #print("Device before moving tensors:", device)
+
+    print("Generating Samples")
 
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
@@ -121,11 +122,11 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     #print(type(synthetic_EEG_samples))
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
-    input_sample['input_embeddings'] = synthetic_EEG_samples
+    input_sample['input_embeddings'] = "Big Test"
 
-    new_samplelist = input_sample['input_embeddings']
+    new_input_sample = input_sample['input_embeddings']
 
-    return input_sample
+    return new_input_sample
 
 
 
