@@ -323,7 +323,12 @@ class ZuCo_dataset(Dataset):
                         for i in range(dev_divider,total_num_sentence):
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
                             if input_sample is not None:
-                                self.inputs.append(input_sample)
+                                #self.inputs.append(input_sample)
+                                input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample,
+                                                                                                     gen_model,
+                                                                                                     word_embeddings,
+                                                                                                     EEG_word_level_embeddings)
+                                self.inputs.append(input_sample_synthetic)
             elif setting == 'unique_subj':
                 print('WARNING!!! only implemented for SR v1 dataset ')
                 # subject ['ZAB', 'ZDM', 'ZGW', 'ZJM', 'ZJN', 'ZJS', 'ZKB', 'ZKH', 'ZKW'] for train
