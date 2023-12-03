@@ -122,7 +122,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     #print(type(synthetic_EEG_samples))
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
-    input_sample['input_embeddings'] = "Big Test"
+    input_sample['input_embeddings'] = synthetic_EEG_samples
 
     new_input_sample = input_sample['input_embeddings']
 

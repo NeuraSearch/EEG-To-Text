@@ -328,7 +328,7 @@ class ZuCo_dataset(Dataset):
                                                                                                      gen_model,
                                                                                                      word_embeddings,
                                                                                                      EEG_word_level_embeddings)
-                                print(input_sample_synthetic['input_embeddings'][0])
+
                                 self.inputs.append(input_sample_synthetic)
             elif setting == 'unique_subj':
                 print('WARNING!!! only implemented for SR v1 dataset ')
