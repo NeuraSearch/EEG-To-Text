@@ -1,4 +1,6 @@
 import os
+from math import floor
+
 import numpy as np
 import torch
 import pickle
@@ -228,7 +230,7 @@ class ZuCo_dataset(Dataset):
         return Embedded_Word_labels, word_embeddings
 
 
-    def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False, augmentation_factor = 0.4):
+    def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False, augmentation_factor = 20):
         self.inputs = []
         self.tokenizer = tokenizer
 
@@ -281,7 +283,7 @@ class ZuCo_dataset(Dataset):
 
             #train divider, on a per sentence count basis, 80% for training, 10% for dev, 10% for test
             train_divider = int(0.8*total_num_sentence)
-            augmentation_size = int(augmentation_factor*train_divider)
+            augmentation_size = floor(int(train_divider/100*augmentation_factor))
             print(f'augmentation size = {augmentation_size}')
             augmentation_counter = 0
             dev_divider = train_divider + int(0.1*total_num_sentence)
