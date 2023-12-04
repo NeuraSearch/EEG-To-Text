@@ -228,7 +228,7 @@ class ZuCo_dataset(Dataset):
         return Embedded_Word_labels, word_embeddings
 
 
-    def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False):
+    def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False, augmentation_factor = 0.4):
         self.inputs = []
         self.tokenizer = tokenizer
 
@@ -263,7 +263,6 @@ class ZuCo_dataset(Dataset):
         Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         #change to increase or decrease the number of synthetic samples
-        augmentation_factor = 0.8
 
 
         if not isinstance(input_dataset_dicts,list):
@@ -302,7 +301,7 @@ class ZuCo_dataset(Dataset):
                             #print(len(input_sample))
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
-                                self.inputs.append(input_sample)
+                                #self.inputs.append(input_sample)
                                 if augmentation_counter < augmentation_size:
                                     input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
                                     if input_sample_synthetic is not None:
