@@ -212,6 +212,7 @@ if __name__ == '__main__':
     print(f'[INFO]using device {dev}')
 
 
+    print(f'[INFO]using generator {generator_name}')
 
 
     ''' set up dataloader '''
