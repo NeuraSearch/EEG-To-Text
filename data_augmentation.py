@@ -304,7 +304,7 @@ class ZuCo_dataset(Dataset):
                             #print(len(input_sample))
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
-                                #self.inputs.append(input_sample)
+                                self.inputs.append(input_sample)
                                 if augmentation_counter < augmentation_size:
                                     input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
                                     if input_sample_synthetic is not None:
