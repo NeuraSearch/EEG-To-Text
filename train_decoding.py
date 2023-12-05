@@ -20,7 +20,7 @@ from data_augmentation import ZuCo_dataset
 from model_decoding import BrainTranslator, BrainTranslatorNaive
 from config import get_config
 
-def train_model(dataloaders, device, model, criterion, optimizer, scheduler, num_epochs=25, checkpoint_path_best = '/users/gxb18167/Datasets/Checkpoints/train_decoding/best/temp_decoding.pt', checkpoint_path_last = '/users/gxb18167/Datasets/Checkpoints/train_decoding/last/temp_decoding.pt'):
+def train_model(dataloaders, device, model, criterion, optimizer, scheduler, checkpoint_path_best, checkpoint_path_last, num_epochs=25):
     # modified from: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
     since = time.time()
       
@@ -144,6 +144,7 @@ if __name__ == '__main__':
     batch_size = args['batch_size']
     
     model_name = args['model_name']
+    generator_name = args['generator_name']
     # model_name = 'BrainTranslatorNaive' # with no additional transformers
     # model_name = 'BrainTranslator' 
     
@@ -153,7 +154,7 @@ if __name__ == '__main__':
     # task_name = 'task1_task2_taskNRv2'
     task_name = args['task_name']
 
-    save_path = "/users/gxb18167/Datasets/Checkpoints/train_decoding"
+    save_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}"
 
     skip_step_one = args['skip_step_one']
     load_step1_checkpoint = args['load_step1_checkpoint']
@@ -248,7 +249,7 @@ if __name__ == '__main__':
 
 
     # train dataset
-    train_set = ZuCo_dataset(whole_dataset_dicts, 'train', tokenizer, subject = subject_choice, eeg_type = eeg_type_choice, bands = bands_choice, setting = dataset_setting, augmentation_factor = augmentation_factor)
+    train_set = ZuCo_dataset(whole_dataset_dicts, 'train', tokenizer, subject = subject_choice, eeg_type = eeg_type_choice, bands = bands_choice, setting = dataset_setting, augmentation_factor = augmentation_factor, generator_name= generator_name)
     # dev dataset
     dev_set = ZuCo_dataset(whole_dataset_dicts, 'dev', tokenizer, subject = subject_choice, eeg_type = eeg_type_choice, bands = bands_choice, setting = dataset_setting)
     # test dataset
@@ -328,7 +329,7 @@ if __name__ == '__main__':
         # print training layers
         show_require_grad_layers(model)
         # return best loss model from step1 training
-        model = train_model(dataloaders, device, model, criterion, optimizer_step1, exp_lr_scheduler_step1, num_epochs=num_epochs_step1, checkpoint_path_best = output_checkpoint_name_best, checkpoint_path_last = output_checkpoint_name_last)
+        model = train_model(dataloaders, device, model, criterion, optimizer_step1, exp_lr_scheduler_step1, checkpoint_path_best = output_checkpoint_name_best, checkpoint_path_last = output_checkpoint_name_last, num_epochs=num_epochs_step1)
 
     ######################################################
     '''step two trainig: update whole model for a few iterations'''
