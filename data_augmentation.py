@@ -283,6 +283,8 @@ class ZuCo_dataset(Dataset):
 
             #train divider, on a per sentence count basis, 80% for training, 10% for dev, 10% for test
             train_divider = int(0.8*total_num_sentence)
+            print(f"Train divider = {train_divider}")
+
             augmentation_size = floor(int(train_divider/100*augmentation_factor))
             print(f'augmentation size = {augmentation_size}')
             augmentation_counter = 0
@@ -303,12 +305,12 @@ class ZuCo_dataset(Dataset):
                             #print(len(input_sample))
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
-                                self.inputs.append(input_sample)
-                                if augmentation_counter < augmentation_size:
-                                    input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
-                                    if input_sample_synthetic is not None:
-                                        self.inputs.append(input_sample_synthetic)
-                                        augmentation_counter += 1
+                                #self.inputs.append(input_sample)
+                                #if augmentation_counter < augmentation_size:
+                                input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
+                                if input_sample_synthetic is not None:
+                                    self.inputs.append(input_sample_synthetic)
+                                    augmentation_counter += 1
 
                 elif phase == 'dev':
                     print('[INFO]initializing a dev set...')
