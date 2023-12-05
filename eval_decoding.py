@@ -146,10 +146,11 @@ if __name__ == '__main__':
     task_name = training_config['task_name']
     
     model_name = training_config['model_name']
+    generator_name = training_config['generator_name']
     # model_name = 'BrainTranslator'
     # model_name = 'BrainTranslatorNaive'
 
-    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/results/{task_name}-{model_name}-all_decoding_results.txt'
+    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results/{task_name}-{model_name}-all_decoding_results.txt'
     ''' set random seeds '''
     seed_val = 312
     np.random.seed(seed_val)
