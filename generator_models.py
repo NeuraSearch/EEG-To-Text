@@ -57,6 +57,6 @@ class Generator_WGAN_Text_2(nn.Module):
 
 def get_generator_model(Model_name, z_size, word_embedding_dim):
 
-    if Model_name == 'WGAN_Text_2.0':
+    if Model_name == 'WGAN_Text_2.0' or "WGAN_Text_3.0":
         return Generator_WGAN_Text_2(z_size, word_embedding_dim)
 
