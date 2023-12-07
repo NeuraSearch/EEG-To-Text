@@ -90,7 +90,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
         if word not in word_embeddings:
-            print("Word not in word embeddings")
+            #print("Word not in word embeddings")
             return None
 
         word_embedding = word_embeddings[word]
