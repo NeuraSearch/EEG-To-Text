@@ -126,7 +126,7 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
         word_embeddings.append(torch.zeros(105*len(bands)))
 
     input_sample['input_embeddings'] = torch.stack(word_embeddings) # max_len * (105*num_bands)
-    input_sample['input_embeddings_labels'] = word_embeddings_labels
+    #input_sample['input_embeddings_labels'] = word_embeddings_labels
 
     # mask out padding tokens
     input_sample['input_attn_mask'] = torch.zeros(max_len) # 0 is masked out
@@ -380,7 +380,7 @@ class ZuCo_dataset(Dataset):
             input_sample['target_mask'], 
             input_sample['sentiment_label'], 
             input_sample['sent_level_EEG'],
-            input_sample['input_embeddings_labels']
+            #input_sample['input_embeddings_labels']
         )
         # keys: input_embeddings, input_attn_mask, input_attn_mask_invert, target_ids, target_mask, 
 

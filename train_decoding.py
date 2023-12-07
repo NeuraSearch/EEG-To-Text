@@ -43,14 +43,22 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
 
             #TODO in this case, the sentence level EEG is not used, so we can just copy and paste sentence level EEG into out synthetic EEG data
             # Iterate over data.
-            for input_embeddings, seq_len, input_masks, input_mask_invert, target_ids, target_mask, sentiment_labels, sent_level_EEG, input_embeddings_labels in tqdm(dataloaders[phase]):
+            for input_embeddings, seq_len, input_masks, input_mask_invert, target_ids, target_mask, sentiment_labels, sent_level_EEG in tqdm(dataloaders[phase]):
                 
                 # load in batch
                 input_embeddings_batch = input_embeddings.to(device).float()
                 input_masks_batch = input_masks.to(device)
                 input_mask_invert_batch = input_mask_invert.to(device)
                 target_ids_batch = target_ids.to(device)
-                input_embeddings_labels_batch = input_embeddings_labels.to(device)
+
+
+                if phase == 'dev':
+                    target_tokens = tokenizer.convert_ids_to_tokens(target_ids_batch[0].tolist(),
+                                                                    skip_special_tokens=True)
+                    print('target tokens:', target_tokens)
+
+
+
 
                 """replace padding ids in target_ids with -100"""
                 target_ids_batch[target_ids_batch == tokenizer.pad_token_id] = -100 
@@ -58,10 +66,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 # zero the parameter gradients
                 optimizer.zero_grad()
 
-                if phase == 'dev':
 
-                    print('[DEBUG]input_embeddings_labels_batch:',input_embeddings_labels_batch.size())
-                    exit()
 
                 # forward
                 seq2seqLMoutput = model(input_embeddings_batch, input_masks_batch, input_mask_invert_batch, target_ids_batch)
@@ -73,6 +78,23 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 # loss = criterion(logits, target_ids_batch_label) # calculate cross entropy loss only on encoded target parts
                 # NOTE: my criterion not used
                 loss = seq2seqLMoutput.loss # use the BART language modeling loss
+
+
+                if phase == 'dev':
+                    # get predicted tokens
+                    # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size())
+                    logits = seq2seqLMoutput.logits  # 8*48*50265
+                    # logits = logits.permute(0,2,1)
+                    # print('permuted logits size:', logits.size())
+                    probs = logits[0].softmax(dim=1)
+                    # print('probs size:', probs.size())
+                    values, predictions = probs.topk(1)
+                    # print('predictions before squeeze:',predictions.size())
+                    predictions = torch.squeeze(predictions)
+                    predicted_string = tokenizer.decode(predictions).split('</s></s>')[0].replace('<s>', '')
+                    # print('predicted string:',predicted_string)
+                    print(f'predicted string: {predicted_string}\n')
+                    print(f'################################################\n\n\n')
 
                 # """check prediction, instance 0 of each batch"""
                 # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size(), ',target_mask size', target_mask_batch.size())
