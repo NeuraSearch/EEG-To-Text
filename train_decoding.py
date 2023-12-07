@@ -96,6 +96,17 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                     print(f'predicted string: {predicted_string}\n')
                     print(f'################################################\n\n\n')
 
+                    predictions = predictions.tolist()
+                    truncated_prediction = []
+                    for t in predictions:
+                        if t != tokenizer.eos_token_id:
+                            truncated_prediction.append(t)
+                        else:
+                            break
+                    pred_tokens = tokenizer.convert_ids_to_tokens(truncated_prediction, skip_special_tokens = True)
+
+                    exit()
+
                 # """check prediction, instance 0 of each batch"""
                 # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size(), ',target_mask size', target_mask_batch.size())
                 # logits = logits.permute(0,2,1)
