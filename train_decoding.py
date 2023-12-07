@@ -50,6 +50,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 input_masks_batch = input_masks.to(device)
                 input_mask_invert_batch = input_mask_invert.to(device)
                 target_ids_batch = target_ids.to(device)
+                input_embeddings_labels_batch = input_embeddings_labels.to(device)
 
                 """replace padding ids in target_ids with -100"""
                 target_ids_batch[target_ids_batch == tokenizer.pad_token_id] = -100 
@@ -58,7 +59,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 optimizer.zero_grad()
 
                 if phase == 'dev':
-                    input_embeddings_labels_batch = input_embeddings_labels.to(device)
+
                     print('[DEBUG]input_embeddings_labels_batch:',input_embeddings_labels_batch.size())
                     exit()
 
