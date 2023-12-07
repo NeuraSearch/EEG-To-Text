@@ -60,6 +60,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 if phase == 'dev':
                     input_embeddings_labels_batch = input_embeddings_labels.to(device)
                     print('[DEBUG]input_embeddings_labels_batch:',input_embeddings_labels_batch.size())
+                    exit()
 
                 # forward
                 seq2seqLMoutput = model(input_embeddings_batch, input_masks_batch, input_mask_invert_batch, target_ids_batch)
