@@ -380,7 +380,7 @@ class ZuCo_dataset(Dataset):
             input_sample['target_mask'], 
             input_sample['sentiment_label'], 
             input_sample['sent_level_EEG'],
-            #input_sample['input_embeddings_labels']
+            input_sample['input_embeddings_labels']
         )
         # keys: input_embeddings, input_attn_mask, input_attn_mask_invert, target_ids, target_mask, 
 

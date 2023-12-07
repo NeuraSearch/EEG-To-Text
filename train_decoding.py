@@ -43,18 +43,23 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
 
             #TODO in this case, the sentence level EEG is not used, so we can just copy and paste sentence level EEG into out synthetic EEG data
             # Iterate over data.
-            for input_embeddings, seq_len, input_masks, input_mask_invert, target_ids, target_mask, sentiment_labels, sent_level_EEG, in tqdm(dataloaders[phase]):
+            for input_embeddings, seq_len, input_masks, input_mask_invert, target_ids, target_mask, sentiment_labels, sent_level_EEG, input_embeddings_labels in tqdm(dataloaders[phase]):
                 
                 # load in batch
                 input_embeddings_batch = input_embeddings.to(device).float()
                 input_masks_batch = input_masks.to(device)
                 input_mask_invert_batch = input_mask_invert.to(device)
                 target_ids_batch = target_ids.to(device)
+
                 """replace padding ids in target_ids with -100"""
                 target_ids_batch[target_ids_batch == tokenizer.pad_token_id] = -100 
               
                 # zero the parameter gradients
                 optimizer.zero_grad()
+
+                if phase == 'dev':
+                    input_embeddings_labels_batch = input_embeddings_labels.to(device)
+                    print('[DEBUG]input_embeddings_labels_batch:',input_embeddings_labels_batch.size())
 
                 # forward
                 seq2seqLMoutput = model(input_embeddings_batch, input_masks_batch, input_mask_invert_batch, target_ids_batch)
