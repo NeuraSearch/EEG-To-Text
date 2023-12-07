@@ -241,10 +241,16 @@ class ZuCo_dataset(Dataset):
             device = "cpu"
 
 
-        with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
-                  'rb') as file:
-            EEG_word_level_embeddings = pickle.load(file)
-            EEG_word_level_labels = pickle.load(file)
+        if generator_name == "WGAN_Text_3.0":
+            with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs_Filtered.pkl",
+                      'rb') as file:
+                EEG_word_level_embeddings = pickle.load(file)
+                EEG_word_level_labels = pickle.load(file)
+        else:
+            with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
+                      'rb') as file:
+                EEG_word_level_embeddings = pickle.load(file)
+                EEG_word_level_labels = pickle.load(file)
 
 
         word_embedding_dim = 50
