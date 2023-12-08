@@ -303,7 +303,7 @@ class ZuCo_dataset(Dataset):
                 if phase == 'train':
                     print('[INFO]initializing a train set...')
                     #iterates through each subject, takes 80% of that subjects sentence, and adds it to the input list
-                    for key in subjects:
+                    for key in subjects: #@TODO Rework sampling of sentences as we are limiting to specific subjects
                         for i in range(train_divider):
                             #get_input_sample takes in each sentence dictionary
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
@@ -311,12 +311,12 @@ class ZuCo_dataset(Dataset):
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
                                 self.inputs.append(input_sample)
+
                                 if augmentation_counter < augmentation_size:
-                                    for j in range(5):
                                         input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
                                         if input_sample_synthetic is not None:
                                             self.inputs.append(input_sample_synthetic)
-                                            #augmentation_counter += 1
+                                            augmentation_counter += 1
 
                 elif phase == 'dev':
                     print('[INFO]initializing a dev set...')
