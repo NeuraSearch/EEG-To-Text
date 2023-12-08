@@ -104,8 +104,9 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                         else:
                             break
                     pred_tokens = tokenizer.convert_ids_to_tokens(truncated_prediction, skip_special_tokens = True)
+                    print('predicted tokens:', pred_tokens)
 
-                    exit()
+
 
                 # """check prediction, instance 0 of each batch"""
                 # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size(), ',target_mask size', target_mask_batch.size())
