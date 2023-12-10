@@ -292,9 +292,9 @@ class ZuCo_dataset(Dataset):
             print(f"Train divider = {train_divider}")
             augmentation_size = floor(int(train_divider/100*augmentation_factor))
             print(f'augmentation size = {augmentation_size}')
-            augmentation_counter = 0
+
             dev_divider = train_divider + int(0.1*total_num_sentence)
-            
+            Total_augmentation_counter = 0
             print(f'train divider = {train_divider}')
             print(f'dev divider = {dev_divider}')
 
@@ -304,6 +304,7 @@ class ZuCo_dataset(Dataset):
                     print('[INFO]initializing a train set...')
                     #iterates through each subject, takes 80% of that subjects sentence, and adds it to the input list
                     for key in subjects: #@TODO Rework sampling of sentences as we are limiting to specific subjects
+                        augmentation_counter = 0
                         for i in range(train_divider):
                             #get_input_sample takes in each sentence dictionary
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
@@ -311,13 +312,12 @@ class ZuCo_dataset(Dataset):
                             if input_sample is not None:
                                 #appends each subjects input sample to the input list
                                 self.inputs.append(input_sample)
-
                                 if augmentation_counter < augmentation_size:
                                         input_sample_synthetic = generate_samples.generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings)
                                         if input_sample_synthetic is not None:
                                             self.inputs.append(input_sample_synthetic)
                                             augmentation_counter += 1
-
+                                            Total_augmentation_counter += 1
                 elif phase == 'dev':
                     print('[INFO]initializing a dev set...')
                     for key in subjects:
@@ -363,7 +363,7 @@ class ZuCo_dataset(Dataset):
                             if input_sample is not None:
                                 self.inputs.append(input_sample)
             print('++ adding task to dataset, now we have:', len(self.inputs))
-            print('[INFO] Augmentation Counter = ', augmentation_counter)
+            print('[INFO] Per Task Augmented Samples ', Total_augmentation_counter)
         print('[INFO]input tensor size:', self.inputs[0]['input_embeddings'].size())
         print()
 
