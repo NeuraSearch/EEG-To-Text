@@ -51,12 +51,12 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 input_mask_invert_batch = input_mask_invert.to(device)
                 target_ids_batch = target_ids.to(device)
 
-
+                '''
                 if phase == 'dev':
                     target_tokens = tokenizer.convert_ids_to_tokens(target_ids_batch[0].tolist(),
                                                                     skip_special_tokens=True)
                     print('target tokens:', target_tokens)
-
+                '''
 
 
 
@@ -79,7 +79,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 # NOTE: my criterion not used
                 loss = seq2seqLMoutput.loss # use the BART language modeling loss
 
-
+                '''
                 if phase == 'dev':
                     # get predicted tokens
                     # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size())
@@ -105,7 +105,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                             break
                     pred_tokens = tokenizer.convert_ids_to_tokens(truncated_prediction, skip_special_tokens = True)
                     print('predicted tokens:', pred_tokens)
-
+                '''
 
 
                 # """check prediction, instance 0 of each batch"""
