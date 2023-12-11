@@ -363,7 +363,7 @@ class ZuCo_dataset(Dataset):
                             if input_sample is not None:
                                 self.inputs.append(input_sample)
             print('++ adding task to dataset, now we have:', len(self.inputs))
-            print('[INFO] Per Task Augmented Samples ', Total_augmentation_counter)
+            print('[INFO] Per Task Augmented Samplees ', Total_augmentation_counter)
         print('[INFO]input tensor size:', self.inputs[0]['input_embeddings'].size())
         print()
 
