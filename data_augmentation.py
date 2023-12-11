@@ -303,7 +303,7 @@ class ZuCo_dataset(Dataset):
                 if phase == 'train':
                     print('[INFO]initializing a train set...')
                     #iterates through each subject, takes 80% of that subjects sentence, and adds it to the input list
-                    for key in subjects: #@TODO Rework sampling of sentences as we are limiting to specific subjects
+                    for key in subjects:
                         augmentation_counter = 0
                         for i in range(train_divider):
                             #get_input_sample takes in each sentence dictionary
