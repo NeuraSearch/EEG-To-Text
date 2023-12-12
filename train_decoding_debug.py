@@ -26,8 +26,9 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
       
     best_model_wts = copy.deepcopy(model.state_dict())
     best_loss = 100000000000
-    
 
+    target_string_list = []
+    pred_string_list = []
     for epoch in range(num_epochs):
         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
         print('-' * 10)
@@ -53,9 +54,8 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
 
 
                 if phase == 'dev':
-                    target_tokens = tokenizer.convert_ids_to_tokens(target_ids_batch[0].tolist(),
-                                                                    skip_special_tokens=True)
-                    print('target tokens:', target_tokens)
+                    target_string = tokenizer.decode(target_ids_batch[0], skip_special_tokens = True)
+                    target_string_list.append(target_string)
 
 
 
@@ -79,7 +79,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 # NOTE: my criterion not used
                 loss = seq2seqLMoutput.loss # use the BART language modeling loss
 
-                '''
+
                 if phase == 'dev':
                     # get predicted tokens
                     # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size())
@@ -93,20 +93,9 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                     predictions = torch.squeeze(predictions)
                     predicted_string = tokenizer.decode(predictions).split('</s></s>')[0].replace('<s>', '')
                     # print('predicted string:',predicted_string)
-                    print(f'predicted string: {predicted_string}\n')
-                    print(f'################################################\n\n\n')
-
-                    predictions = predictions.tolist()
-                    truncated_prediction = []
-                    for t in predictions:
-                        if t != tokenizer.eos_token_id:
-                            truncated_prediction.append(t)
-                        else:
-                            break
-                    pred_tokens = tokenizer.convert_ids_to_tokens(truncated_prediction, skip_special_tokens = True)
-                    print('predicted tokens:', pred_tokens)
-                '''
-
+                    #print(f'predicted string: {predicted_string}\n')
+                    #print(f'################################################\n\n\n')
+                    pred_string_list.append(predicted_string)
 
                 # """check prediction, instance 0 of each batch"""
                 # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size(), ',target_mask size', target_mask_batch.size())
@@ -159,6 +148,10 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
     print(f'update last checkpoint: {checkpoint_path_last}')
 
     # load best model weights
+    data_to_save = {'Target_String': target_string_list, 'Predicted_String': pred_string_list}
+    with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/Target_Pred_Strings.pickle', 'wb') as handle:
+        pickle.dump(data_to_save, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
     model.load_state_dict(best_model_wts)
     return model
 
