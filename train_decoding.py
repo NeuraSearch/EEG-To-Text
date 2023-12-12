@@ -52,11 +52,12 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 target_ids_batch = target_ids.to(device)
 
 
+                '''
                 if phase == 'dev':
                     target_tokens = tokenizer.convert_ids_to_tokens(target_ids_batch[0].tolist(),
                                                                     skip_special_tokens=True)
                     print('target tokens:', target_tokens)
-
+                '''
 
 
 
