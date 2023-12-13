@@ -291,7 +291,8 @@ class ZuCo_dataset(Dataset):
             train_divider = int(0.8*total_num_sentence)
             print(f"Train divider = {train_divider}")
             augmentation_size = floor(int(train_divider/100*augmentation_factor))
-            print(f'augmentation size = {augmentation_size}')
+            print(f"Augmentation Factor = {augmentation_factor}")
+            print(f'Augmentation size = {augmentation_size}')
 
             dev_divider = train_divider + int(0.1*total_num_sentence)
             Total_augmentation_counter = 0
