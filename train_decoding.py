@@ -203,7 +203,9 @@ if __name__ == '__main__':
     use_random_init = args['use_random_init']
     augmentation_factor = args['augmentation_factor']
 
-    augmentation_factor_int = augmentation_factor.replace('.','')
+
+
+    augmentation_factor_str = str(augmentation_factor).replace('.','')
 
     if use_random_init and skip_step_one:
         step2_lr = 5*1e-4
