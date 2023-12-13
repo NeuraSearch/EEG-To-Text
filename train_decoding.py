@@ -205,7 +205,7 @@ if __name__ == '__main__':
 
 
 
-    augmentation_factor_str = str(augmentation_factor).replace('.','')
+    augmentation_factor_str = str(augmentation_factor).replace('.','_')
 
     if use_random_init and skip_step_one:
         step2_lr = 5*1e-4
