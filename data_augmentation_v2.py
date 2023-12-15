@@ -395,6 +395,7 @@ class ZuCo_dataset(Dataset):
                                                                                          EEG_word_level_embeddings)
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
+
             elif augmenation_type == 'less_frequent':
                 print('[INFO] Augmenting Dataset by less frequent sampling')
                 augmentation_order = self.augment_list_balanced(EEG_word_level_labels, Augmentation_size, balance_factor=0.15)
