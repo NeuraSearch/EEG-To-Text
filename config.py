@@ -31,6 +31,8 @@ def get_config(case):
         parser.add_argument('-no-load1', '--not_load_step1_checkpoint', dest='load_step1_checkpoint', action='store_false')
 
         parser.add_argument('-aug', '--augmentation_factor', type= float, help='augmentation_factor', default = 20, required=True)
+        parser.add_argument('-augtp', '--augmentation_type', type= str, help='augmentation_type', default = 'random', required=False)
+
 
         parser.add_argument('-ne1', '--num_epoch_step1', type = int, help='num_epoch_step1', default = 20, required=True)
         parser.add_argument('-ne2', '--num_epoch_step2', type = int, help='num_epoch_step2', default = 30, required=True)

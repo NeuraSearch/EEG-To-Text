@@ -174,6 +174,8 @@ if __name__ == '__main__':
     num_epochs_step2 = args['num_epoch_step2']
     step1_lr = args['learning_rate_step1']
     step2_lr = args['learning_rate_step2']
+
+
     
     batch_size = args['batch_size']
     
@@ -194,6 +196,7 @@ if __name__ == '__main__':
     load_step1_checkpoint = args['load_step1_checkpoint']
     use_random_init = args['use_random_init']
     augmentation_factor = int(args['augmentation_factor'])
+    augmentation_type = args['augmentation_type']
 
     if use_random_init and skip_step_one:
         step2_lr = 5*1e-4
@@ -201,9 +204,9 @@ if __name__ == '__main__':
     print(f'[INFO]using model: {model_name}')
     
     if skip_step_one:
-        save_name = f'Augment_v2_{augmentation_factor}_{task_name}_finetune_{model_name}_skipstep1_b{batch_size}_{num_epochs_step1}_{num_epochs_step2}_{step1_lr}_{step2_lr}_{dataset_setting}'
+        save_name = f'Augment_v2_{augmentation_factor}_{augmentation_type}_{task_name}_finetune_{model_name}_skipstep1_b{batch_size}_{num_epochs_step1}_{num_epochs_step2}_{step1_lr}_{step2_lr}_{dataset_setting}'
     else:
-        save_name = f'Augment_v2_{augmentation_factor}_{task_name}_finetune_{model_name}_2steptraining_b{batch_size}_{num_epochs_step1}_{num_epochs_step2}_{step1_lr}_{step2_lr}_{dataset_setting}'
+        save_name = f'Augment_v2_{augmentation_factor}_{augmentation_type}_{task_name}_finetune_{model_name}_2steptraining_b{batch_size}_{num_epochs_step1}_{num_epochs_step2}_{step1_lr}_{step2_lr}_{dataset_setting}'
     
     if use_random_init:
         save_name = 'randinit_' + save_name
@@ -284,7 +287,7 @@ if __name__ == '__main__':
 
 
     # train dataset
-    train_set = ZuCo_dataset(whole_dataset_dicts, 'train', tokenizer, subject = subject_choice, eeg_type = eeg_type_choice, bands = bands_choice, setting = dataset_setting, augmentation_factor = augmentation_factor, generator_name= generator_name)
+    train_set = ZuCo_dataset(whole_dataset_dicts, 'train', tokenizer, subject = subject_choice, eeg_type = eeg_type_choice, bands = bands_choice, setting = dataset_setting, augmentation_factor = augmentation_factor, generator_name= generator_name, augmenation_type=augmentation_type)
     # dev dataset
     dev_set = ZuCo_dataset(whole_dataset_dicts, 'dev', tokenizer, subject = subject_choice, eeg_type = eeg_type_choice, bands = bands_choice, setting = dataset_setting)
     # test dataset
