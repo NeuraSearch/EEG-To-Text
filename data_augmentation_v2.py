@@ -1,5 +1,6 @@
 import os
 import random
+from collections import Counter
 from math import floor
 
 import numpy as np
@@ -230,6 +231,28 @@ class ZuCo_dataset(Dataset):
 
         return Embedded_Word_labels, word_embeddings
 
+    def augment_list_balanced(self, original_list, augmentation_percentage, balance_factor=0.15):
+        # Count the frequency of each word in the original list
+        word_counts = {}
+        for word in original_list:
+            word_counts[word] = word_counts.get(word, 0) + 1
+
+        # Identify less frequent words
+        unique_words = list(set(original_list))
+        less_frequent_words = sorted(unique_words, key=lambda x: word_counts[x])
+
+        # Determine the number of words to add for augmentation
+        num_words_to_add = int(len(original_list) * augmentation_percentage)
+
+        # Augment the list with less frequent words
+        augmented_list = []
+        for _ in range(num_words_to_add):
+            # Choose a word with higher probability for less frequent words
+            weights = [1 / (word_counts[word] ** balance_factor) for word in less_frequent_words]
+            chosen_word = random.choices(less_frequent_words, weights=weights)[0]
+            augmented_list.append(chosen_word)
+
+        return augmented_list
 
     def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False, augmentation_factor = 20, generator_name = "WGAN_Text_2.0", augmenation_type = 'random'):
         self.inputs = []
@@ -372,6 +395,26 @@ class ZuCo_dataset(Dataset):
                                                                                          EEG_word_level_embeddings)
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
+            elif augmenation_type == 'less_frequent':
+                print('[INFO] Augmenting Dataset by less frequent sampling')
+                augmentation_order = self.augment_list_balanced(EEG_word_level_labels, Augmentation_size, balance_factor=0.15)
+                print('[INFO] Augmentation order size:', len(augmentation_order))
+                augmentation_order = Counter(augmentation_order)
+                for input_samples in self.inputs:
+                    input_sample_word_label = input_samples['input_embeddings_labels']
+                    if input_sample_word_label in augmentation_order:
+                        augmentation_loop_number = augmentation_order[input_sample_word_label]
+                        for i in range(augmentation_loop_number):
+                            input_sample_synthetic = generate_samples.generate_synthetic_samples(input_samples, gen_model,
+                                                                                                 word_embeddings,
+                                                                                                 EEG_word_level_embeddings)
+                            if input_sample_synthetic is not None:
+                                self.inputs.append(input_sample_synthetic)
+
+
+
+
+
 
 
         print()
