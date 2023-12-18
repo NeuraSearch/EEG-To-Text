@@ -406,7 +406,6 @@ class ZuCo_dataset(Dataset):
                 for input_samples in self.inputs:
                     input_sample_word_label = input_samples['input_embeddings_labels']
                     print(input_sample_word_label)
-
                     for word in input_sample_word_label:
                         if word in augmentation_order:
                             augmentation_loop_number = augmentation_order[word]

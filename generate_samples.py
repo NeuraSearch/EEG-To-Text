@@ -126,6 +126,61 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
 
     return input_sample
 
+def generate_synthetic_samples_tf(input_sample, augmentation_order, gen_model, word_embeddings, EEG_word_level_embeddings):
+    if torch.cuda.is_available():
+        device = torch.device("cuda:0")
+    else:
+        device = "cpu"
+
+    word_embedding_dim = 50
+    z_size = 100
+    output_shape = (1, 105, 8)
+    input_embeddings_labels = input_sample['input_embeddings_labels']
+    original_sample_list = input_sample['input_embeddings']
+
+    #print("Generating Samples")
+
+
+
+    synthetic_EEG_samples = []
+    for word in input_embeddings_labels:
+        if word not in word_embeddings:
+            #print("Word not in word embeddings")
+            return None
+
+        word_embedding = word_embeddings[word]
+        input_z = create_noise(1, 100, "uniform").to(device)
+
+        word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float)
+        word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
+
+        g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
+        #print("G_output location:", g_output.device)
+        g_output = g_output.to('cpu')
+        #print("G_output location post:", g_output.device)
+
+
+        EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
+            EEG_word_level_embeddings)
+
+        synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float)
+
+        synthetic_sample = synthetic_sample.resize(840)
+        synthetic_EEG_samples.append(synthetic_sample)
+
+
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    padding_samples = padding_samples
+    #print(type(padding_samples))
+    #print(type(synthetic_EEG_samples))
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
+
+    input_sample['input_embeddings'] = synthetic_EEG_samples
+
+
+    return input_sample
+
 
 
 
