@@ -404,9 +404,9 @@ class ZuCo_dataset(Dataset):
                 print('[INFO] Augmentation order size:', len(augmentation_order))
                 augmentation_order = Counter(augmentation_order)
                 for input_samples in self.inputs:
-                    print('[INFO] Input Sample Data type:', type(input_samples))
-                    exit()
                     input_sample_word_label = input_samples['input_embeddings_labels']
+                    print(input_sample_word_label)
+                    exit()
                     if input_sample_word_label in augmentation_order:
                         augmentation_loop_number = augmentation_order[input_sample_word_label]
                         for i in range(augmentation_loop_number):
