@@ -383,10 +383,11 @@ class ZuCo_dataset(Dataset):
         print('[INFO]input tensor size:', self.inputs[0]['input_embeddings'].size())
 
         if phase == 'train':
-            Augmentation_size = floor(int(len(self.inputs)/100*augmentation_factor))
-            print('[INFO] Augmenting Dataset by:', Augmentation_size)
+
 
             if augmenation_type == 'random':
+                Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
+                print('[INFO] Augmenting Dataset by:', Augmentation_size)
                 print('[INFO] Augmenting Dataset by random sampling')
                 sampled_elements = random.sample(self.inputs, Augmentation_size)
                 for input in sampled_elements:
@@ -397,11 +398,14 @@ class ZuCo_dataset(Dataset):
                         self.inputs.append(input_sample_synthetic)
 
             elif augmenation_type == 'less_frequent':
+                Augmentation_size = augmentation_factor/100
                 print('[INFO] Augmenting Dataset by less frequent sampling')
                 augmentation_order = self.augment_list_balanced(EEG_word_level_labels, Augmentation_size, balance_factor=0.15)
                 print('[INFO] Augmentation order size:', len(augmentation_order))
                 augmentation_order = Counter(augmentation_order)
                 for input_samples in self.inputs:
+                    print('[INFO] Input Sample Data type:', type(input_samples))
+                    exit()
                     input_sample_word_label = input_samples['input_embeddings_labels']
                     if input_sample_word_label in augmentation_order:
                         augmentation_loop_number = augmentation_order[input_sample_word_label]

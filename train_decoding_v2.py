@@ -52,11 +52,11 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 input_mask_invert_batch = input_mask_invert.to(device)
                 target_ids_batch = target_ids.to(device)
 
-
+                '''
                 if phase == 'dev':
                     target_string = tokenizer.decode(target_ids_batch[0], skip_special_tokens = True)
                     target_string_list.append(target_string)
-
+                '''
 
 
 
@@ -80,6 +80,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 loss = seq2seqLMoutput.loss # use the BART language modeling loss
 
 
+                '''
                 if phase == 'dev':
                     # get predicted tokens
                     # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size())
@@ -96,6 +97,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                     #print(f'predicted string: {predicted_string}\n')
                     #print(f'################################################\n\n\n')
                     pred_string_list.append(predicted_string)
+                '''
 
                 # """check prediction, instance 0 of each batch"""
                 # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size(), ',target_mask size', target_mask_batch.size())
@@ -147,11 +149,13 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
     torch.save(model.state_dict(), checkpoint_path_last)
     print(f'update last checkpoint: {checkpoint_path_last}')
 
-    # load best model weights
+
+    '''
     data_to_save = {'Target_String': target_string_list, 'Predicted_String': pred_string_list}
     with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/Target_Pred_Strings.pickle', 'wb') as handle:
         pickle.dump(data_to_save, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
+    '''
+    # load best model weights
     model.load_state_dict(best_model_wts)
     return model
 
