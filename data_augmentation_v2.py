@@ -406,15 +406,16 @@ class ZuCo_dataset(Dataset):
                 for input_samples in self.inputs:
                     input_sample_word_label = input_samples['input_embeddings_labels']
                     print(input_sample_word_label)
-                    exit()
-                    if input_sample_word_label in augmentation_order:
-                        augmentation_loop_number = augmentation_order[input_sample_word_label]
-                        for i in range(augmentation_loop_number):
-                            input_sample_synthetic = generate_samples.generate_synthetic_samples(input_samples, gen_model,
-                                                                                                 word_embeddings,
-                                                                                                 EEG_word_level_embeddings)
-                            if input_sample_synthetic is not None:
-                                self.inputs.append(input_sample_synthetic)
+
+                    for word in input_sample_word_label:
+                        if word in augmentation_order:
+                            augmentation_loop_number = augmentation_order[word]
+                            for i in range(augmentation_loop_number):
+                                input_sample_synthetic = generate_samples.generate_synthetic_samples(input_samples, gen_model,
+                                                                                                     word_embeddings,
+                                                                                                     EEG_word_level_embeddings)
+                                if input_sample_synthetic is not None:
+                                    self.inputs.append(input_sample_synthetic)
 
 
 
