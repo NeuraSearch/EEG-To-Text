@@ -383,8 +383,6 @@ class ZuCo_dataset(Dataset):
         print('[INFO]input tensor size:', self.inputs[0]['input_embeddings'].size())
 
         if phase == 'train':
-
-
             if augmenation_type == 'random':
                 Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
@@ -397,6 +395,24 @@ class ZuCo_dataset(Dataset):
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
 
+            elif augmenation_type == 'fully_synthetic':
+                Augmentation_size = floor(len(self.inputs))
+                print('[INFO] Augmenting Dataset by:', Augmentation_size)
+                print('[INFO] Augmenting Dataset by fully synthetic sampling')
+                fully_synthetic_samples = []
+                for input_samples in self.inputs:
+                    input_sample_synthetic = generate_samples.generate_synthetic_samples(input_samples, gen_model,
+                                                                                         word_embeddings,
+                                                                                         EEG_word_level_embeddings)
+                    if input_sample_synthetic is not None:
+                        fully_synthetic_samples.append(input_sample_synthetic)
+                self.inputs = fully_synthetic_samples
+
+            '''
+            !Note - Needs modification, as it generates are too many samples to compute
+            !Note - Solution may be identifying just the word and replacing the EEG with synthetic, 
+                    instead of generating entire sentence again
+            
             elif augmenation_type == 'less_frequent':
                 Augmentation_size = augmentation_factor/100
                 print('[INFO] Augmenting Dataset by less frequent sampling')
@@ -415,7 +431,7 @@ class ZuCo_dataset(Dataset):
                                                                                                      EEG_word_level_embeddings)
                                 if input_sample_synthetic is not None:
                                     self.inputs.append(input_sample_synthetic)
-
+            '''
 
 
 
