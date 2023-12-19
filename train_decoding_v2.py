@@ -20,7 +20,7 @@ from data_augmentation_v2 import ZuCo_dataset
 from model_decoding import BrainTranslator, BrainTranslatorNaive
 from config import get_config
 
-def train_model(dataloaders, device, model, criterion, optimizer, scheduler, checkpoint_path_best, checkpoint_path_last, num_epochs=25):
+def train_model(dataloaders, device, model, criterion, optimizer, scheduler, checkpoint_path_best, checkpoint_path_last, augmentation_type, augmentation_factor, num_epochs=25):
     # modified from: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
     since = time.time()
       
@@ -52,11 +52,11 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 input_mask_invert_batch = input_mask_invert.to(device)
                 target_ids_batch = target_ids.to(device)
 
-                '''
+
                 if phase == 'dev':
                     target_string = tokenizer.decode(target_ids_batch[0], skip_special_tokens = True)
                     target_string_list.append(target_string)
-                '''
+
 
 
 
@@ -80,7 +80,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 loss = seq2seqLMoutput.loss # use the BART language modeling loss
 
 
-                '''
+
                 if phase == 'dev':
                     # get predicted tokens
                     # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size())
@@ -97,7 +97,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                     #print(f'predicted string: {predicted_string}\n')
                     #print(f'################################################\n\n\n')
                     pred_string_list.append(predicted_string)
-                '''
+
 
                 # """check prediction, instance 0 of each batch"""
                 # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size(), ',target_mask size', target_mask_batch.size())
@@ -150,11 +150,12 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
     print(f'update last checkpoint: {checkpoint_path_last}')
 
 
-    '''
+
     data_to_save = {'Target_String': target_string_list, 'Predicted_String': pred_string_list}
-    with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/Target_Pred_Strings.pickle', 'wb') as handle:
+    savepath = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/Target_Pred_Strings{augmentation_type}_{augmentation_factor}.pickle'
+    with open(savepath, 'wb') as handle:
         pickle.dump(data_to_save, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    '''
+
     # load best model weights
     model.load_state_dict(best_model_wts)
     return model
@@ -371,7 +372,7 @@ if __name__ == '__main__':
         # print training layers
         show_require_grad_layers(model)
         # return best loss model from step1 training
-        model = train_model(dataloaders, device, model, criterion, optimizer_step1, exp_lr_scheduler_step1, checkpoint_path_best = output_checkpoint_name_best, checkpoint_path_last = output_checkpoint_name_last, num_epochs=num_epochs_step1)
+        model = train_model(dataloaders, device, model, criterion, optimizer_step1, exp_lr_scheduler_step1, checkpoint_path_best = output_checkpoint_name_best, checkpoint_path_last = output_checkpoint_name_last, augmentation_type=augmentation_type, augmentation_factor=augmentation_factor, num_epochs=num_epochs_step1)
 
     ######################################################
     '''step two trainig: update whole model for a few iterations'''
@@ -393,7 +394,7 @@ if __name__ == '__main__':
     show_require_grad_layers(model)
     
     '''main loop'''
-    trained_model = train_model(dataloaders, device, model, criterion, optimizer_step2, exp_lr_scheduler_step2, num_epochs=num_epochs_step2, checkpoint_path_best = output_checkpoint_name_best, checkpoint_path_last = output_checkpoint_name_last)
+    trained_model = train_model(dataloaders, device, model, criterion, optimizer_step2, exp_lr_scheduler_step2, num_epochs=num_epochs_step2, checkpoint_path_best = output_checkpoint_name_best,augmentation_type=augmentation_type, augmentation_factor = augmentation_factor, checkpoint_path_last = output_checkpoint_name_last)
 
     # '''save checkpoint'''
     # torch.save(trained_model.state_dict(), os.path.join(save_path,output_checkpoint_name))
