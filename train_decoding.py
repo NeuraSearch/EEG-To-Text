@@ -17,7 +17,7 @@ from tqdm import tqdm
 from transformers import BertLMHeadModel, BartTokenizer, BartForConditionalGeneration, BartConfig, BartForSequenceClassification, BertTokenizer, BertConfig, BertForSequenceClassification, RobertaTokenizer, RobertaForSequenceClassification
 
 from data_augmentation import ZuCo_dataset
-from model_decoding import BrainTranslator, BrainTranslatorNaive
+from model_decoding_bug_fix import BrainTranslator, BrainTranslatorNaive
 from config import get_config
 
 def train_model(dataloaders, device, model, criterion, optimizer, scheduler, checkpoint_path_best, checkpoint_path_last, num_epochs=25):
