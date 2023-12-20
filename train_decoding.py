@@ -52,14 +52,6 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 target_ids_batch = target_ids.to(device)
 
 
-                '''
-                if phase == 'dev':
-                    target_tokens = tokenizer.convert_ids_to_tokens(target_ids_batch[0].tolist(),
-                                                                    skip_special_tokens=True)
-                    print('target tokens:', target_tokens)
-                '''
-
-
 
                 """replace padding ids in target_ids with -100"""
                 target_ids_batch[target_ids_batch == tokenizer.pad_token_id] = -100 
@@ -80,33 +72,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, che
                 # NOTE: my criterion not used
                 loss = seq2seqLMoutput.loss # use the BART language modeling loss
 
-                '''
-                if phase == 'dev':
-                    # get predicted tokens
-                    # print('target size:', target_ids_batch.size(), ',original logits size:', logits.size())
-                    logits = seq2seqLMoutput.logits  # 8*48*50265
-                    # logits = logits.permute(0,2,1)
-                    # print('permuted logits size:', logits.size())
-                    probs = logits[0].softmax(dim=1)
-                    # print('probs size:', probs.size())
-                    values, predictions = probs.topk(1)
-                    # print('predictions before squeeze:',predictions.size())
-                    predictions = torch.squeeze(predictions)
-                    predicted_string = tokenizer.decode(predictions).split('</s></s>')[0].replace('<s>', '')
-                    # print('predicted string:',predicted_string)
-                    print(f'predicted string: {predicted_string}\n')
-                    print(f'################################################\n\n\n')
 
-                    predictions = predictions.tolist()
-                    truncated_prediction = []
-                    for t in predictions:
-                        if t != tokenizer.eos_token_id:
-                            truncated_prediction.append(t)
-                        else:
-                            break
-                    pred_tokens = tokenizer.convert_ids_to_tokens(truncated_prediction, skip_special_tokens = True)
-                    print('predicted tokens:', pred_tokens)
-                '''
 
 
                 # """check prediction, instance 0 of each batch"""
