@@ -28,7 +28,7 @@
 #======================================================
 
 module purge
-module load nvidia/sdk/22.3
+module load nvidia/sdk/23.3
 module load anaconda/python-3.10.9/2023.03
 
 #Uncomment the following if you are running multi-threaded
