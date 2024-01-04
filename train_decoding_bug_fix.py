@@ -18,7 +18,7 @@ from transformers import BertLMHeadModel, BartTokenizer, BartForConditionalGener
     BartForSequenceClassification, BertTokenizer, BertConfig, BertForSequenceClassification, RobertaTokenizer, \
     RobertaForSequenceClassification
 
-from data import ZuCo_dataset
+from data_augmentation_v2 import ZuCo_dataset
 from model_decoding_bug_fix import BrainTranslator, BrainTranslatorNaive
 from config import get_config
 
@@ -174,8 +174,8 @@ if __name__ == '__main__':
     load_step1_checkpoint = args['load_step1_checkpoint']
     use_random_init = args['use_random_init']
 
-    augmentation_factor = args['augmentation_factor']
-    augmentation_factor_str = str(augmentation_factor).replace('.', '_')
+    augmentation_factor = int(args['augmentation_factor'])
+    augmentation_type = args['augmentation_type']
 
     if use_random_init and skip_step_one:
         step2_lr = 5 * 1e-4
@@ -183,16 +183,14 @@ if __name__ == '__main__':
     print(f'[INFO]using model: {model_name}')
 
     if skip_step_one:
-        save_name = f'Augment_{augmentation_factor_str}_{task_name}_finetune_{model_name}_skipstep1_b{batch_size}_{num_epochs_step1}_{num_epochs_step2}_{step1_lr}_{step2_lr}_{dataset_setting}'
+        save_name = f'Augment_v2_{augmentation_factor}_{augmentation_type}_{task_name}_finetune_{model_name}_skipstep1_b{batch_size}_{num_epochs_step1}_{num_epochs_step2}_{step1_lr}_{step2_lr}_{dataset_setting}'
     else:
-        save_name = f'Augment_{augmentation_factor_str}_{task_name}_finetune_{model_name}_2steptraining_b{batch_size}_{num_epochs_step1}_{num_epochs_step2}_{step1_lr}_{step2_lr}_{dataset_setting}'
+        save_name = f'Augment_v2_{augmentation_factor}_{augmentation_type}_{task_name}_finetune_{model_name}_2steptraining_b{batch_size}_{num_epochs_step1}_{num_epochs_step2}_{step1_lr}_{step2_lr}_{dataset_setting}'
 
     if use_random_init:
         save_name = 'randinit_' + save_name
 
-
     output_checkpoint_name_best = save_path + f'/best/{save_name}.pt'
-
     output_checkpoint_name_last = save_path + f'/last/{save_name}.pt'
 
     # subject_choice = 'ALL
@@ -258,7 +256,8 @@ if __name__ == '__main__':
 
     # train dataset
     train_set = ZuCo_dataset(whole_dataset_dicts, 'train', tokenizer, subject=subject_choice, eeg_type=eeg_type_choice,
-                             bands=bands_choice, setting=dataset_setting)
+                             bands=bands_choice, setting=dataset_setting, augmentation_factor=augmentation_factor,
+                             generator_name=generator_name, augmenation_type=augmentation_type)
     # dev dataset
     dev_set = ZuCo_dataset(whole_dataset_dicts, 'dev', tokenizer, subject=subject_choice, eeg_type=eeg_type_choice,
                            bands=bands_choice, setting=dataset_setting)
