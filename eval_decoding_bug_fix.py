@@ -75,7 +75,7 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
             f.write(f'################################################\n\n\n')
 
             # convert to int list
-            predictions = predictions.tolist()
+            #predictions = predictions.tolist()
             truncated_prediction = []
             for t in predictions:
                 if t != tokenizer.eos_token_id:
