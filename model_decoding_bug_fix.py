@@ -57,7 +57,7 @@ class BrainTranslator(nn.Module):
         output = self.pretrained.generate(
             inputs_embeds=encoded_embedding,
             attention_mask=input_masks_batch[:, :encoded_embedding.shape[1]],
-            #labels=target_ids_batch_converted,
+            labels=target_ids_batch_converted,
             return_dict=True,
             generation_config=generation_config,
             logits_processor=logits_processor,
