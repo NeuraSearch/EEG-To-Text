@@ -66,8 +66,8 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
                                          # do_sample=True, top_k=15,temperature=0.5,num_return_sequences=5,
                                          # early_stopping=True
                                          )
-            predicted_string = tokenizer.batch_decode(predictions, skip_special_tokens=False)
-            predicted_string = predicted_string.squeeze()
+            predicted_string = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+            predicted_string = predicted_string[0]
 
             predictions = tokenizer.encode(predicted_string)
             # print('predicted string:',predicted_string)
