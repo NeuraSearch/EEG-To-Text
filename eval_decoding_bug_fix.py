@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 from transformers import BartTokenizer, BartForConditionalGeneration, BartConfig
 from data import ZuCo_dataset
-from model_decoding import BrainTranslator, BrainTranslatorNaive
+from model_decoding_bug_fix import BrainTranslator, BrainTranslatorNaive
 from nltk.translate.bleu_score import sentence_bleu, corpus_bleu
 from rouge import Rouge
 from config import get_config
