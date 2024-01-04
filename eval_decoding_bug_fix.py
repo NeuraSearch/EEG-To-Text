@@ -192,7 +192,7 @@ if __name__ == '__main__':
         model = BrainTranslatorNaive(pretrained_bart, in_feature=105 * len(bands_choice), decoder_embedding_size=1024,
                                      additional_encoder_nhead=8, additional_encoder_dim_feedforward=2048)
 
-    model.load_state_dict(torch.load(checkpoint_path))
+    model.load_state_dict(torch.load(checkpoint_path, map_location=torch.device('cpu')))
     model.to(device)
 
     criterion = nn.CrossEntropyLoss()
