@@ -19,7 +19,7 @@ from transformers import BertLMHeadModel, BartTokenizer, BartForConditionalGener
     RobertaForSequenceClassification
 
 from data import ZuCo_dataset
-from model_decoding import BrainTranslator, BrainTranslatorNaive
+from model_decoding_bug_fix import BrainTranslator, BrainTranslatorNaive
 from config import get_config
 
 
