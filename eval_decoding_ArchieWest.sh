@@ -44,7 +44,7 @@ module load anaconda/python-3.9.7/2021.11
 #Modify the line below to run your program. This is an example
 #=========================================================
  sbatch
-python /users/gxb18167/EEG-To-Text/eval_decoding_bug_fix.py --checkpoint_path /users/gxb18167/Datasets/Checkpoints/train_decoding/WGAN_Text_2.0/best/Augment_v2_2_random_task1_task2_taskNRv2_finetune_BrainTranslator_skipstep1_b32_20_30_5e-05_5e-07_unique_sent.pt --config_path /users/gxb18167/Datasets/Checkpoints/train_decoding/WGAN_Text_2.0/Augment_v2_2_random_task1_task2_taskNRv2_finetune_BrainTranslator_skipstep1_b32_20_30_5e-05_5e-07_unique_sent.json -cuda cuda:0
+python /users/gxb18167/EEG-To-Text/eval_decoding_bug_fix.py --checkpoint_path /users/gxb18167/Datasets/Checkpoints/train_decoding/WGAN_Text_2.0/best/Augment_v2_3_random_task1_task2_taskNRv2_finetune_BrainTranslator_skipstep1_b32_20_30_5e-05_5e-07_unique_sent.pt --config_path /users/gxb18167/Datasets/Checkpoints/train_decoding/WGAN_Text_2.0/Augment_v2_3_random_task1_task2_taskNRv2_finetune_BrainTranslator_skipstep1_b32_20_30_5e-05_5e-07_unique_sent.json -cuda cuda:0
 
 # Do not change the line below
 #=========================================================
