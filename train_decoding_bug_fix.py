@@ -167,6 +167,9 @@ if __name__ == '__main__':
     # task_name = 'task1_task2_taskNRv2'
     task_name = args['task_name']
 
+    #remove .pt
+    generator_path_save = generator_path.split('.')[0]
+
     save_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path}"
     if not os.path.exists(save_path):
         os.makedirs(save_path)
