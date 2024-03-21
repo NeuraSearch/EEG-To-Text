@@ -8,7 +8,7 @@ import torch
 import pickle
 import torch
 import torch.nn as nn
-import generator_models
+import Networks
 from gensim.models import Word2Vec
 
 import generate_samples
@@ -233,7 +233,7 @@ class ZuCo_dataset(Dataset):
         z_size = 100
 
 
-        gen_model = generator_models.get_generator_model(generator_name, z_size, word_embedding_dim)
+        gen_model = Networks.get_generator_model(generator_name, z_size, word_embedding_dim)
         checkpoint = torch.load(
             fr"/users/gxb18167/Datasets/Checkpoints/{generator_name}/"+generator_path,
             map_location=device)
