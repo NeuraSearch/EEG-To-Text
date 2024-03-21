@@ -35,19 +35,12 @@ def create_word_label_embeddings(Word_Labels_List, word_embedding_dim=50):
     return Embedded_Word_labels, word_embeddings
 
 def create_dataloader(EEG_word_level_embeddings, Embedded_Word_labels):
-    #EEG_word_level_embeddings_normalize = (EEG_word_level_embeddings - np.mean(EEG_word_level_embeddings)) / np.std(EEG_word_level_embeddings)
-
-    # Assuming EEG_synthetic is the generated synthetic EEG data
-    #EEG_synthetic_denormalized = (EEG_synthetic * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(EEG_word_level_embeddings)
-
-
     EEG_word_level_embeddings_normalize = (EEG_word_level_embeddings - np.mean(EEG_word_level_embeddings)) / np.max(np.abs(EEG_word_level_embeddings))
 
 
     float_tensor = torch.tensor(EEG_word_level_embeddings_normalize, dtype=torch.float)
     float_tensor = float_tensor.unsqueeze(1)
 
-    #print(EEG_word_level_embeddings_normalize)
     # Calculate mean and standard deviation
     print(torch.isnan(float_tensor).any())
 
@@ -85,12 +78,9 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     input_embeddings_labels = input_sample['input_embeddings_labels']
     original_sample_list = input_sample['input_embeddings']
 
-    #print("Generating Samples")
-
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
         if word not in word_embeddings:
-            #print("Word not in word embeddings")
             return None
 
         word_embedding = word_embeddings[word]
@@ -100,10 +90,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
         word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
 
         g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
-        #print("G_output location:", g_output.device)
         g_output = g_output.to('cpu')
-        #print("G_output location post:", g_output.device)
-
 
         EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
             EEG_word_level_embeddings)
@@ -117,8 +104,6 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
     padding_samples = original_sample_list[len(synthetic_EEG_samples):]
     padding_samples = padding_samples
-    #print(type(padding_samples))
-    #print(type(synthetic_EEG_samples))
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
     input_sample['input_embeddings'] = synthetic_EEG_samples
