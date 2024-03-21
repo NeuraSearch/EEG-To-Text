@@ -17,7 +17,8 @@ def get_config(case):
 
 
         parser.add_argument('-m', '--model_name', help='choose from {BrainTranslator, BrainTranslatorNaive}', default = "BrainTranslator" ,required=True)
-        parser.add_argument('-ge', '--generator_name', default='WGAN_Text_2.0', required=True)
+        parser.add_argument('-ge', '--generator_name', default='WGAN_v1_Text', required=True)
+        parser.add_argument('-gp', '--generator_path', default='./checkpoints/generator', required=True)
         parser.add_argument('-t', '--task_name', help='choose from {task1,task1_task2, task1_task2_task3,task1_task2_taskNRv2}', default = "task1", required=True)
         
         parser.add_argument('-1step', '--one_step', dest='skip_step_one', action='store_true')

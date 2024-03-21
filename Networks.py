@@ -1133,3 +1133,7 @@ class GeneratorACGAN_v2(nn.Module):
         z = self.tanh(z)
 
         return z
+
+def get_generator_model(Model_name, z_size, word_embedding_dim):
+    if Model_name == 'WGAN_v1_Text':
+        return GeneratorWGAN_v1_Text(z_size, word_embedding_dim)

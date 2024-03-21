@@ -157,6 +157,7 @@ if __name__ == '__main__':
 
     model_name = args['model_name']
     generator_name = args['generator_name']
+    generator_path = args['generator_path']
     # model_name = 'BrainTranslatorNaive' # with no additional transformers
     # model_name = 'BrainTranslator'
 
@@ -257,7 +258,7 @@ if __name__ == '__main__':
     # train dataset
     train_set = ZuCo_dataset(whole_dataset_dicts, 'train', tokenizer, subject=subject_choice, eeg_type=eeg_type_choice,
                              bands=bands_choice, setting=dataset_setting, augmentation_factor=augmentation_factor,
-                             generator_name=generator_name, augmenation_type=augmentation_type)
+                             generator_name=generator_name, generator_path=generator_path, augmenation_type=augmentation_type)
     # dev dataset
     dev_set = ZuCo_dataset(whole_dataset_dicts, 'dev', tokenizer, subject=subject_choice, eeg_type=eeg_type_choice,
                            bands=bands_choice, setting=dataset_setting)
