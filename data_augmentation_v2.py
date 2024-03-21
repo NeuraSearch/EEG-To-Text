@@ -256,7 +256,6 @@ class ZuCo_dataset(Dataset):
 
             dev_divider = train_divider + int(0.1*total_num_sentence)
 
-            Total_augmentation_counter = 0
             print(f'train divider = {train_divider}')
             print(f'dev divider = {dev_divider}')
 
@@ -325,13 +324,21 @@ class ZuCo_dataset(Dataset):
                 Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
                 print('[INFO] Augmenting Dataset by random sampling')
-                sampled_elements = random.sample(self.inputs, Augmentation_size)
-                for input in sampled_elements:
-                    input_sample_synthetic = generate_samples.generate_synthetic_samples(input, gen_model,
-                                                                                         word_embeddings,
-                                                                                         EEG_word_level_embeddings)
-                    if input_sample_synthetic is not None:
-                        self.inputs.append(input_sample_synthetic)
+
+                sampled_elements = self.inputs.copy()
+
+                random.shuffle(sampled_elements)
+
+                number_of_augmented_samples = 0
+
+                while number_of_augmented_samples < Augmentation_size:
+                    for input in sampled_elements:
+                        input_sample_synthetic = generate_samples.generate_synthetic_samples(input, gen_model,
+                                                                                             word_embeddings,
+                                                                                             EEG_word_level_embeddings)
+                        if input_sample_synthetic is not None:
+                            self.inputs.append(input_sample_synthetic)
+                            number_of_augmented_samples += 1
 
 
             """
