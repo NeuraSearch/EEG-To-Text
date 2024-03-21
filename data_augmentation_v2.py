@@ -147,8 +147,6 @@ def get_input_sample(sent_obj, tokenizer, eeg_type = 'GD', bands = ['_t1','_t2',
     else:
         input_sample['input_attn_mask_invert'][:len(sent_obj['word'])] = torch.zeros(len(sent_obj['word'])) # 0 is not masked
 
-    
-
     # mask out target padding for computing cross entropy loss
     input_sample['target_mask'] = target_tokenized['attention_mask'][0]
     input_sample['seq_len'] = len(sent_obj['word'])
@@ -217,21 +215,13 @@ class ZuCo_dataset(Dataset):
             device = "cpu"
 
 
-        if generator_name == "WGAN_Text_3.0":
-            with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs_Filtered.pkl",
-                      'rb') as file:
-                EEG_word_level_embeddings = pickle.load(file)
-                EEG_word_level_labels = pickle.load(file)
-        else:
-            with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
-                      'rb') as file:
-                EEG_word_level_embeddings = pickle.load(file)
-                EEG_word_level_labels = pickle.load(file)
-
+        with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
+                  'rb') as file:
+            EEG_word_level_embeddings = pickle.load(file)
+            EEG_word_level_labels = pickle.load(file)
 
         word_embedding_dim = 50
         z_size = 100
-
 
         gen_model = Networks.get_generator_model(generator_name, z_size, word_embedding_dim)
         checkpoint = torch.load(
@@ -265,6 +255,7 @@ class ZuCo_dataset(Dataset):
             print(f"Train divider = {train_divider}")
 
             dev_divider = train_divider + int(0.1*total_num_sentence)
+
             Total_augmentation_counter = 0
             print(f'train divider = {train_divider}')
             print(f'dev divider = {dev_divider}')
