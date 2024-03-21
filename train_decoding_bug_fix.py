@@ -170,7 +170,7 @@ if __name__ == '__main__':
     #remove .pt
     generator_path_save = generator_path.split('.')[0]
 
-    save_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path}"
+    save_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path_save}"
     if not os.path.exists(save_path):
         os.makedirs(save_path)
         os.makedirs(save_path + '/best')
@@ -250,7 +250,7 @@ if __name__ == '__main__':
     print()
 
     """save config"""
-    with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/{save_name}.json', 'w') as out_config:
+    with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path_save}/{save_name}.json', 'w') as out_config:
         json.dump(args, out_config, indent = 4)
 
     if model_name in ['BrainTranslator', 'BrainTranslatorNaive']:
