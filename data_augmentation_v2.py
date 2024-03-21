@@ -295,8 +295,6 @@ class ZuCo_dataset(Dataset):
         Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         #change to increase or decrease the number of synthetic samples
-
-
         if not isinstance(input_dataset_dicts,list):
             input_dataset_dicts = [input_dataset_dicts]
         print(f'[INFO]loading {len(input_dataset_dicts)} task datasets')
@@ -395,6 +393,8 @@ class ZuCo_dataset(Dataset):
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
 
+
+            """
             elif augmenation_type == 'fully_synthetic':
                 Augmentation_size = floor(len(self.inputs))
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
@@ -407,6 +407,7 @@ class ZuCo_dataset(Dataset):
                     if input_sample_synthetic is not None:
                         fully_synthetic_samples.append(input_sample_synthetic)
                 self.inputs = fully_synthetic_samples
+            """
 
             '''
             !Note - Needs modification, as it generates are too many samples to compute
@@ -432,13 +433,6 @@ class ZuCo_dataset(Dataset):
                                 if input_sample_synthetic is not None:
                                     self.inputs.append(input_sample_synthetic)
             '''
-
-
-
-
-
-
-        print()
 
     def __len__(self):
         return len(self.inputs)
