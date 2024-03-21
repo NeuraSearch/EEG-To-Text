@@ -195,7 +195,7 @@ if __name__ == '__main__':
     # task_name = 'task1_task2_taskNRv2'
     task_name = args['task_name']
 
-    save_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}"
+
 
     skip_step_one = args['skip_step_one']
     load_step1_checkpoint = args['load_step1_checkpoint']

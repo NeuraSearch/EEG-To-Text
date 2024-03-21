@@ -257,7 +257,7 @@ class ZuCo_dataset(Dataset):
             else:
                 subjects = [subject]
 
-            #Determines the total number of sentences on a per subject basis?
+            #Determines the total number of sentences on a per subject basis
             total_num_sentence = len(input_dataset_dict[subjects[0]])
 
             #train divider, on a per sentence count basis, 80% for training, 10% for dev, 10% for test
@@ -299,8 +299,6 @@ class ZuCo_dataset(Dataset):
                             input_sample = get_input_sample(input_dataset_dict[key][i],self.tokenizer,eeg_type,bands = bands, add_CLS_token = is_add_CLS_token)
                             if input_sample is not None:
                                 self.inputs.append(input_sample)
-
-
 
             elif setting == 'unique_subj':
                 print('WARNING!!! only implemented for SR v1 dataset ')

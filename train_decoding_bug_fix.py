@@ -167,9 +167,11 @@ if __name__ == '__main__':
     # task_name = 'task1_task2_taskNRv2'
     task_name = args['task_name']
 
-    save_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}"
+    save_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path}"
     if not os.path.exists(save_path):
         os.makedirs(save_path)
+        os.makedirs(save_path + '/best')
+        os.makedirs(save_path + '/last')
 
     skip_step_one = args['skip_step_one']
     load_step1_checkpoint = args['load_step1_checkpoint']
