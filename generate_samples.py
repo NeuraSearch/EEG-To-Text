@@ -146,7 +146,6 @@ def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, 
     elif augmentation_type == "TF-IDF-High" and sentence_tf_idf < threshold_2:
         return None
 
-
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
         if word not in word_embeddings:
