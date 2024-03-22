@@ -4,18 +4,15 @@ from collections import Counter
 from math import floor
 
 import numpy as np
-import torch
 import pickle
 import torch
-import torch.nn as nn
+import math
 import Networks
 from gensim.models import Word2Vec
 
 import generate_samples
 from torch.utils.data import Dataset, DataLoader
 import json
-import matplotlib.pyplot as plt
-from glob import glob
 from transformers import BartTokenizer, BertTokenizer
 from tqdm import tqdm
 #from fuzzy_match import match
@@ -437,8 +434,95 @@ class SST_tenary_dataset(Dataset):
     def __getitem__(self, idx):
         input_sample = self.inputs[idx]
         return input_sample
-        # keys: input_embeddings, input_attn_mask, input_attn_mask_invert, target_ids, target_mask, 
-        
+        # keys: input_embeddings, input_attn_mask, input_attn_mask_invert, target_ids, target_mask,
+
+    def calculate_tf(self, sentences):
+        # Join all sentences to form a single string
+        all_words = ' '.join(sentences)
+
+        # Tokenize the string into words
+        words = all_words.split()
+
+        # Count the frequency of each word
+        word_counts = Counter(words)
+
+        # Total number of words
+        total_words = len(words)
+
+        # Calculate TF for each word
+        tf_scores = {word: word_counts[word] / total_words for word in word_counts}
+
+        return tf_scores
+
+    def calculate_idf(self, sentences):
+        # Tokenize each sentence into words and create a set of unique words
+        all_words = set(word for sentence in sentences for word in sentence.split())
+
+        # Count the number of sentences containing each word
+        word_sentence_count = Counter(word for sentence in sentences for word in set(sentence.split()))
+
+        # Total number of sentences
+        total_sentences = len(sentences)
+
+        # Calculate IDF for each word
+        idf_scores = {word: math.log(total_sentences / (word_sentence_count[word] + 1)) for word in all_words}
+
+        return idf_scores
+
+    def calculate_tf_idf(self, sentences):
+        # Tokenize each sentence into words and create a set of unique words
+        all_words = set(word for sentence in sentences for word in sentence.split())
+
+        # Count the frequency of each word in each sentence
+        word_counts_per_sentence = [Counter(sentence.split()) for sentence in sentences]
+
+        # Total number of sentences
+        total_sentences = len(sentences)
+
+        # Calculate TF for each word in each sentence
+        tf_scores = {word: sum(word_counts[word] for word_counts in word_counts_per_sentence) / (
+                    total_sentences * len(word_counts_per_sentence)) for word in all_words}
+
+        # Calculate IDF for each word
+        word_sentence_count = Counter(word for sentence in sentences for word in set(sentence.split()))
+        idf_scores = {word: math.log(total_sentences / (word_sentence_count[word] + 1)) for word in all_words}
+
+        # Calculate TF-IDF for each word
+        tfidf_scores = {word: tf_scores[word] * idf_scores[word] for word in all_words}
+
+        return tfidf_scores
+
+    def calc_sentence_tf_idf(self, input_list):
+        # To load the lists from the file:
+        with open(
+                r"/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs_Sentence.pkl", "rb") as file:
+            EEG_word_level_embeddings = pickle.load(file)
+            EEG_word_level_labels = pickle.load(file)
+
+        list_of_sentences = []
+
+        Sentence = []
+        for i in range(len(EEG_word_level_labels)):
+            if EEG_word_level_labels[i] == "SOS" and Sentence != []:
+                Sentence = " ".join(Sentence)
+                list_of_sentences.append(Sentence)
+                Sentence = []
+            elif EEG_word_level_labels[i] != "SOS":
+                Sentence.append(EEG_word_level_labels[i])
+
+        tf_idf = self.calculate_tf_idf(list_of_sentences)
+
+        list_of_sentence_tf_idf = []
+
+        for sentence in list_of_sentences:
+            sum_of_sentence_tf_idf = 0
+            for word in sentence.split():
+                sum_of_sentence_tf_idf += tf_idf[word]
+
+            sum_of_sentence_tf_idf = sum_of_sentence_tf_idf / len(sentence.split())
+            list_of_sentence_tf_idf.append(sum_of_sentence_tf_idf)
+
+        pass
 
 
 '''sanity test'''

@@ -72,6 +72,8 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     else:
         device = "cpu"
 
+
+
     word_embedding_dim = 50
     z_size = 100
     output_shape = (1, 105, 8)
