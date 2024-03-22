@@ -138,7 +138,6 @@ def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, 
 
     sentence_tf_idf = calc_sentence_tf_idf(input_embeddings_labels, tf_idf)
 
-    #if augmenation_type == "TF-IDF-High" or augmenation_type == "TF-IDF-Medium" or augmenation_type == "TF-IDF-Low":
     if augmentation_type == "TF-IDF-Low" and sentence_tf_idf > threshold_1:
         return None
     elif augmentation_type == "TF-IDF-Medium" and sentence_tf_idf < threshold_1 and sentence_tf_idf > threshold_2:
@@ -175,7 +174,6 @@ def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, 
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
     input_sample['input_embeddings'] = synthetic_EEG_samples
-
 
     return input_sample
 
