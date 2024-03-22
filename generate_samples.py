@@ -127,7 +127,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     return input_sample
 
 
-def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf):
+def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2):
     if torch.cuda.is_available():
         device = torch.device("cuda:0")
     else:
