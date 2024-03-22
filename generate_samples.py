@@ -180,6 +180,8 @@ def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, 
     input_embeddings_labels = input_sample['input_embeddings_labels']
     original_sample_list = input_sample['input_embeddings']
 
+
+
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
         if word not in word_embeddings:

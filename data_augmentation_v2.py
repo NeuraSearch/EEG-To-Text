@@ -337,46 +337,26 @@ class ZuCo_dataset(Dataset):
                             self.inputs.append(input_sample_synthetic)
                             number_of_augmented_samples += 1
 
-
-            """
-            elif augmenation_type == 'fully_synthetic':
-                Augmentation_size = floor(len(self.inputs))
+            if augmenation_type == "TF-IDF-High" or augmenation_type == "TF-IDF-Medium" or augmenation_type == "TF-IDF-Low":
+                Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
-                print('[INFO] Augmenting Dataset by fully synthetic sampling')
-                fully_synthetic_samples = []
-                for input_samples in self.inputs:
-                    input_sample_synthetic = generate_samples.generate_synthetic_samples(input_samples, gen_model,
-                                                                                         word_embeddings,
-                                                                                         EEG_word_level_embeddings)
-                    if input_sample_synthetic is not None:
-                        fully_synthetic_samples.append(input_sample_synthetic)
-                self.inputs = fully_synthetic_samples
-            """
+                print('[INFO] Augmenting Dataset by random sampling')
 
-            '''
-            !Note - Needs modification, as it generates are too many samples to compute
-            !Note - Solution may be identifying just the word and replacing the EEG with synthetic, 
-                    instead of generating entire sentence again
-            
-            elif augmenation_type == 'less_frequent':
-                Augmentation_size = augmentation_factor/100
-                print('[INFO] Augmenting Dataset by less frequent sampling')
-                augmentation_order = self.augment_list_balanced(EEG_word_level_labels, Augmentation_size, balance_factor=0.15)
-                print('[INFO] Augmentation order size:', len(augmentation_order))
-                augmentation_order = Counter(augmentation_order)
-                for input_samples in self.inputs:
-                    input_sample_word_label = input_samples['input_embeddings_labels']
-                    print(input_sample_word_label)
-                    for word in input_sample_word_label:
-                        if word in augmentation_order:
-                            augmentation_loop_number = augmentation_order[word]
-                            for i in range(augmentation_loop_number):
-                                input_sample_synthetic = generate_samples.generate_synthetic_samples(input_samples, gen_model,
-                                                                                                     word_embeddings,
-                                                                                                     EEG_word_level_embeddings)
-                                if input_sample_synthetic is not None:
-                                    self.inputs.append(input_sample_synthetic)
-            '''
+                tf_idf = self.calc_sentence_tf_idf()
+                sampled_elements = self.inputs.copy()
+
+                random.shuffle(sampled_elements)
+
+                number_of_augmented_samples = 0
+
+                while number_of_augmented_samples < Augmentation_size:
+                    for input in sampled_elements:
+                        input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf(input, gen_model,
+                                                                                             word_embeddings,
+                                                                                             EEG_word_level_embeddings)
+                        if input_sample_synthetic is not None:
+                            self.inputs.append(input_sample_synthetic)
+                            number_of_augmented_samples += 1
 
     def __len__(self):
         return len(self.inputs)
@@ -396,6 +376,51 @@ class ZuCo_dataset(Dataset):
         )
         # keys: input_embeddings, input_attn_mask, input_attn_mask_invert, target_ids, target_mask, 
 
+
+    def calculate_tf_idf(self, sentences):
+        # Tokenize each sentence into words and create a set of unique words
+        all_words = set(word for sentence in sentences for word in sentence.split())
+
+        # Count the frequency of each word in each sentence
+        word_counts_per_sentence = [Counter(sentence.split()) for sentence in sentences]
+
+        # Total number of sentences
+        total_sentences = len(sentences)
+
+        # Calculate TF for each word in each sentence
+        tf_scores = {word: sum(word_counts[word] for word_counts in word_counts_per_sentence) / (
+                    total_sentences * len(word_counts_per_sentence)) for word in all_words}
+
+        # Calculate IDF for each word
+        word_sentence_count = Counter(word for sentence in sentences for word in set(sentence.split()))
+        idf_scores = {word: math.log(total_sentences / (word_sentence_count[word] + 1)) for word in all_words}
+
+        # Calculate TF-IDF for each word
+        tfidf_scores = {word: tf_scores[word] * idf_scores[word] for word in all_words}
+
+        return tfidf_scores
+
+    def calc_sentence_tf_idf(self, input_list):
+        # To load the lists from the file:
+        with open(
+                r"/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs_Sentence.pkl", "rb") as file:
+            EEG_word_level_embeddings = pickle.load(file)
+            EEG_word_level_labels = pickle.load(file)
+
+        list_of_sentences = []
+
+        Sentence = []
+        for i in range(len(EEG_word_level_labels)):
+            if EEG_word_level_labels[i] == "SOS" and Sentence != []:
+                Sentence = " ".join(Sentence)
+                list_of_sentences.append(Sentence)
+                Sentence = []
+            elif EEG_word_level_labels[i] != "SOS":
+                Sentence.append(EEG_word_level_labels[i])
+
+        tf_idf = self.calculate_tf_idf(list_of_sentences)
+
+        return tf_idf
 
 """for train classifier on stanford sentiment treebank text-sentiment pairs"""
 class SST_tenary_dataset(Dataset):
@@ -435,8 +460,6 @@ class SST_tenary_dataset(Dataset):
         input_sample = self.inputs[idx]
         return input_sample
         # keys: input_embeddings, input_attn_mask, input_attn_mask_invert, target_ids, target_mask,
-
-
 
 
 '''sanity test'''
