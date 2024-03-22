@@ -1,3 +1,6 @@
+import math
+from collections import Counter
+
 import torch
 import torch.nn as nn
 import sys
@@ -25,8 +28,6 @@ def create_word_label_embeddings(Word_Labels_List, word_embedding_dim=50):
     model = Word2Vec(sentences=tokenized_words, vector_size=word_embedding_dim, window=5, min_count=1, workers=4)
     word_embeddings = {word: model.wv[word] for word in model.wv.index_to_key}
     print("Number of word embeddings:", len(word_embeddings))
-    #word, embedding = list(word_embeddings.items())[10]
-    #print(f"Word: {word}, Embedding: {embedding}")
 
     Embedded_Word_labels = []
     for word in Word_Labels_List:
@@ -57,6 +58,63 @@ def create_noise(batch_size, z_size, mode_z):
         input_z = torch.randn(batch_size, z_size)
     return input_z
 
+
+def calculate_tf_idf(sentences):
+    # Tokenize each sentence into words and create a set of unique words
+    all_words = set(word for sentence in sentences for word in sentence.split())
+
+    # Count the frequency of each word in each sentence
+    word_counts_per_sentence = [Counter(sentence.split()) for sentence in sentences]
+
+    # Total number of sentences
+    total_sentences = len(sentences)
+
+    # Calculate TF for each word in each sentence
+    tf_scores = {word: sum(word_counts[word] for word_counts in word_counts_per_sentence) / (
+                total_sentences * len(word_counts_per_sentence)) for word in all_words}
+
+    # Calculate IDF for each word
+    word_sentence_count = Counter(word for sentence in sentences for word in set(sentence.split()))
+    idf_scores = {word: math.log(total_sentences / (word_sentence_count[word] + 1)) for word in all_words}
+
+    # Calculate TF-IDF for each word
+    tfidf_scores = {word: tf_scores[word] * idf_scores[word] for word in all_words}
+
+    return tfidf_scores
+
+def calc_sentence_tf_idf():
+    # To load the lists from the file:
+    with open(
+            r"/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs_Sentence.pkl", "rb") as file:
+        EEG_word_level_embeddings = pickle.load(file)
+        EEG_word_level_labels = pickle.load(file)
+
+    list_of_sentences = []
+
+    Sentence = []
+    for i in range(len(EEG_word_level_labels)):
+        if EEG_word_level_labels[i] == "SOS" and Sentence != []:
+            Sentence = " ".join(Sentence)
+            list_of_sentences.append(Sentence)
+            Sentence = []
+        elif EEG_word_level_labels[i] != "SOS":
+            Sentence.append(EEG_word_level_labels[i])
+
+    tf_idf = calculate_tf_idf(list_of_sentences)
+
+    list_of_sentence_tf_idf = []
+
+    for sentence in list_of_sentences:
+        sum_of_sentence_tf_idf = 0
+        for word in sentence.split():
+            sum_of_sentence_tf_idf += tf_idf[word]
+
+        sum_of_sentence_tf_idf = sum_of_sentence_tf_idf / len(sentence.split())
+        list_of_sentence_tf_idf.append(sum_of_sentence_tf_idf)
+
+    return list_of_sentence_tf_idf
+
+
 def generate_samples(g_model, input_z, input_t):
     # Create random noise as input to the generator
     # Generate samples using the generator model
@@ -71,7 +129,6 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
         device = torch.device("cuda:0")
     else:
         device = "cpu"
-
 
 
     word_embedding_dim = 50
@@ -112,6 +169,51 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
 
 
     return input_sample
+
+
+def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
+    if torch.cuda.is_available():
+        device = torch.device("cuda:0")
+    else:
+        device = "cpu"
+
+    input_embeddings_labels = input_sample['input_embeddings_labels']
+    original_sample_list = input_sample['input_embeddings']
+
+    synthetic_EEG_samples = []
+    for word in input_embeddings_labels:
+        if word not in word_embeddings:
+            return None
+
+        word_embedding = word_embeddings[word]
+        input_z = create_noise(1, 100, "uniform").to(device)
+
+        word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float)
+        word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
+
+        g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
+        g_output = g_output.to('cpu')
+
+        EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
+            EEG_word_level_embeddings)
+
+        synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float)
+
+        synthetic_sample = synthetic_sample.resize(840)
+        synthetic_EEG_samples.append(synthetic_sample)
+
+
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    padding_samples = padding_samples
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
+
+    input_sample['input_embeddings'] = synthetic_EEG_samples
+
+
+    return input_sample
+
+
 
 
 
