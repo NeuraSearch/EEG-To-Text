@@ -353,7 +353,7 @@ class ZuCo_dataset(Dataset):
                     for input in sampled_elements:
                         input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf(input, gen_model,
                                                                                              word_embeddings,
-                                                                                             EEG_word_level_embeddings)
+                                                                                             EEG_word_level_embeddings, tf_idf)
                         if input_sample_synthetic is not None:
                             self.inputs.append(input_sample_synthetic)
                             number_of_augmented_samples += 1
@@ -400,7 +400,7 @@ class ZuCo_dataset(Dataset):
 
         return tfidf_scores
 
-    def calc_sentence_tf_idf(self, input_list):
+    def calc_sentence_tf_idf(self):
         # To load the lists from the file:
         with open(
                 r"/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs_Sentence.pkl", "rb") as file:
