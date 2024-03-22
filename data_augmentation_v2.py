@@ -342,7 +342,7 @@ class ZuCo_dataset(Dataset):
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
                 print('[INFO] Augmenting Dataset by random sampling')
 
-                tf_idf = self.calc_sentence_tf_idf()
+                tf_idf, threshold_1, threshold_2 = self.calc_sentence_tf_idf()
                 sampled_elements = self.inputs.copy()
 
                 random.shuffle(sampled_elements)
@@ -353,7 +353,7 @@ class ZuCo_dataset(Dataset):
                     for input in sampled_elements:
                         input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf(input, gen_model,
                                                                                              word_embeddings,
-                                                                                             EEG_word_level_embeddings, tf_idf)
+                                                                                             EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2)
                         if input_sample_synthetic is not None:
                             self.inputs.append(input_sample_synthetic)
                             number_of_augmented_samples += 1
@@ -420,7 +420,23 @@ class ZuCo_dataset(Dataset):
 
         tf_idf = self.calculate_tf_idf(list_of_sentences)
 
-        return tf_idf
+        list_of_sentence_tf_idf = []
+
+        for sentence in list_of_sentences:
+            sum_of_sentence_tf_idf = 0
+            for word in sentence.split():
+                sum_of_sentence_tf_idf += tf_idf[word]
+
+            sum_of_sentence_tf_idf = sum_of_sentence_tf_idf / len(sentence.split())
+            list_of_sentence_tf_idf.append(sum_of_sentence_tf_idf)
+
+        data = np.array(list_of_sentence_tf_idf)
+        tertiles = np.percentile(data, [33.33, 66.67])
+
+        threshold1 = tertiles[0]
+        threshold2 = tertiles[1]
+
+        return tf_idf, threshold1, threshold2
 
 """for train classifier on stanford sentiment treebank text-sentiment pairs"""
 class SST_tenary_dataset(Dataset):

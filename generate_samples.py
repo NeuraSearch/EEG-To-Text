@@ -78,7 +78,7 @@ def calc_sentence_tf_idf(sentence, tf_idf):
     return sentence_level_tf_idf/len(sentence)
 
 
-def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf):
+def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
     if torch.cuda.is_available():
         device = torch.device("cuda:0")
     else:
@@ -127,7 +127,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     return input_sample
 
 
-def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
+def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf):
     if torch.cuda.is_available():
         device = torch.device("cuda:0")
     else:
@@ -136,7 +136,7 @@ def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, 
     input_embeddings_labels = input_sample['input_embeddings_labels']
     original_sample_list = input_sample['input_embeddings']
 
-
+    sentence_tf_idf = calc_sentence_tf_idf(input_embeddings_labels, tf_idf)
 
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
