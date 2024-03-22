@@ -127,7 +127,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     return input_sample
 
 
-def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2):
+def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmentation_type):
     if torch.cuda.is_available():
         device = torch.device("cuda:0")
     else:
@@ -137,6 +137,15 @@ def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, 
     original_sample_list = input_sample['input_embeddings']
 
     sentence_tf_idf = calc_sentence_tf_idf(input_embeddings_labels, tf_idf)
+
+    #if augmenation_type == "TF-IDF-High" or augmenation_type == "TF-IDF-Medium" or augmenation_type == "TF-IDF-Low":
+    if augmentation_type == "TF-IDF-Low" and sentence_tf_idf > threshold_1:
+        return None
+    elif augmentation_type == "TF-IDF-Medium" and sentence_tf_idf < threshold_1 and sentence_tf_idf > threshold_2:
+        return None
+    elif augmentation_type == "TF-IDF-High" and sentence_tf_idf < threshold_2:
+        return None
+
 
     synthetic_EEG_samples = []
     for word in input_embeddings_labels:
