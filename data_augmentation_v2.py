@@ -222,7 +222,7 @@ class ZuCo_dataset(Dataset):
 
         gen_model = Networks.get_generator_model(generator_name, z_size, word_embedding_dim)
         checkpoint = torch.load(
-            fr"/users/gxb18167/Datasets/Checkpoints/{generator_name}/"+generator_path,
+            fr"/users/gxb18167/Datasets/Checkpoints/{generator_name}/{generator_path}",
             map_location=device)
         # Load the model's state_dict onto the CPU
         gen_model.load_state_dict(checkpoint['gen_model_state_dict'])

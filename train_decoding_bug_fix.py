@@ -266,7 +266,8 @@ if __name__ == '__main__':
                              generator_name=generator_name, generator_path=generator_path, augmenation_type=augmentation_type)
     # dev dataset
     dev_set = ZuCo_dataset(whole_dataset_dicts, 'dev', tokenizer, subject=subject_choice, eeg_type=eeg_type_choice,
-                           bands=bands_choice, setting=dataset_setting)
+                           bands=bands_choice, setting=dataset_setting, augmentation_factor=augmentation_factor,
+                             generator_name=generator_name, generator_path=generator_path, augmenation_type=augmentation_type)
     # test dataset
     # test_set = ZuCo_dataset(whole_dataset_dict, 'test', tokenizer, subject = subject_choice, eeg_type = eeg_type_choice, bands = bands_choice)
 
