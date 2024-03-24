@@ -87,10 +87,10 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
         synthetic_EEG_samples.append(synthetic_sample.to('cpu'))
 
 
-    #synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
-    #padding_samples = original_sample_list[len(synthetic_EEG_samples):]
-    #padding_samples = padding_samples
-    #synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    padding_samples = padding_samples
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
     #input_sample['input_embeddings'] = synthetic_EEG_samples
 
