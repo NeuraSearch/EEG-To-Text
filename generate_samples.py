@@ -76,24 +76,24 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
         g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
         g_output = g_output.to('cpu')
 
-        EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
-            EEG_word_level_embeddings)
+        #EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
+            #EEG_word_level_embeddings)
 
-        synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float)
+        #synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float)
 
-        synthetic_sample = synthetic_sample.resize(840)
-        synthetic_EEG_samples.append(synthetic_sample)
-
-
-    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
-    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
-    padding_samples = padding_samples
-    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
-
-    input_sample['input_embeddings'] = synthetic_EEG_samples
+        #synthetic_sample = synthetic_sample.resize(840)
+        #synthetic_EEG_samples.append(synthetic_sample)
 
 
-    return input_sample
+    #synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    #padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    #padding_samples = padding_samples
+    #synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
+
+    #input_sample['input_embeddings'] = synthetic_EEG_samples
+
+
+    #return input_sample
 
 
 def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmentation_type):
