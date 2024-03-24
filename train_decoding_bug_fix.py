@@ -113,7 +113,8 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, num
                 best_loss = epoch_loss
                 best_model_wts = copy.deepcopy(model.state_dict())
                 '''save checkpoint'''
-                torch.save(model.state_dict(), checkpoint_path_best)
+                #TODO save best model
+                #torch.save(model.state_dict(), checkpoint_path_best)
                 print(f'update best on dev checkpoint: {checkpoint_path_best}')
                 # with torch.set_grad_enabled(False):
                 #     traced_model_1 = torch.jit.trace(model, (torch.rand(1, 56, 840).to(device), torch.randint(1, 56).to(device), torch.rand(1, 56).to(device), torch.rand(1, 56).to(device)))
@@ -125,7 +126,7 @@ def train_model(dataloaders, device, model, criterion, optimizer, scheduler, num
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60, time_elapsed % 60))
     print('Best val loss: {:4f}'.format(best_loss))
-    torch.save(model.state_dict(), checkpoint_path_last)
+    #torch.save(model.state_dict(), checkpoint_path_last)
     print(f'update last checkpoint: {checkpoint_path_last}')
 
     # load best model weights
@@ -250,8 +251,9 @@ if __name__ == '__main__':
     print()
 
     """save config"""
-    with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path_save}/{save_name}.json', 'w') as out_config:
-        json.dump(args, out_config, indent = 4)
+    #TODO save config
+    #with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path_save}/{save_name}.json', 'w') as out_config:
+        #json.dump(args, out_config, indent = 4)
 
     if model_name in ['BrainTranslator', 'BrainTranslatorNaive']:
         tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')

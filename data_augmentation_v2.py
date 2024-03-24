@@ -211,26 +211,28 @@ class ZuCo_dataset(Dataset):
         else:
             device = "cpu"
 
-
-        with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
-                  'rb') as file:
-            EEG_word_level_embeddings = pickle.load(file)
-            EEG_word_level_labels = pickle.load(file)
+        if phase == 'train':
+            with open("/users/gxb18167/Datasets/ZuCo/EEG_Text_Pairs.pkl",
+                      'rb') as file:
+                EEG_word_level_embeddings = pickle.load(file)
+                EEG_word_level_labels = pickle.load(file)
 
         word_embedding_dim = 50
         z_size = 100
 
-        gen_model = Networks.get_generator_model(generator_name, z_size, word_embedding_dim)
-        checkpoint = torch.load(
-            fr"/users/gxb18167/Datasets/Checkpoints/{generator_name}/{generator_path}",
-            map_location=device)
-        # Load the model's state_dict onto the CPU
-        gen_model.load_state_dict(checkpoint['gen_model_state_dict'])
-        gen_model.to(device)
-        # Set the model to evaluation mode
-        gen_model.eval()
+        if phase == 'train':
+            gen_model = Networks.get_generator_model(generator_name, z_size, word_embedding_dim)
+            checkpoint = torch.load(
+                fr"/users/gxb18167/Datasets/Checkpoints/{generator_name}/{generator_path}",
+                map_location=device)
+            # Load the model's state_dict onto the CPU
+            gen_model.load_state_dict(checkpoint['gen_model_state_dict'])
+            gen_model.to(device)
+            # Set the model to evaluation mode
+            gen_model.eval()
 
-        Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
+        if phase == 'train':
+            Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
 
         #change to increase or decrease the number of synthetic samples
         if not isinstance(input_dataset_dicts,list):
@@ -326,8 +328,6 @@ class ZuCo_dataset(Dataset):
 
                 sampled_elements = random.sample(self.inputs, Augmentation_size)
 
-
-
                 #number_of_augmented_samples = 0
 
                 '''
@@ -340,12 +340,14 @@ class ZuCo_dataset(Dataset):
                             self.inputs.append(input_sample_synthetic)
                             number_of_augmented_samples += 1
                 '''
+
                 for input in sampled_elements:
                     input_sample_synthetic = generate_samples.generate_synthetic_samples(input, gen_model,
                                                                                          word_embeddings,
                                                                                          EEG_word_level_embeddings)
                     if input_sample_synthetic is not None:
-                        self.inputs.append(input_sample_synthetic)
+                        pass
+                        #self.inputs.append(input_sample_synthetic)
 
 
             if augmenation_type == "TF-IDF-High" or augmenation_type == "TF-IDF-Medium" or augmenation_type == "TF-IDF-Low":
