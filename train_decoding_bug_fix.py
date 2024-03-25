@@ -252,8 +252,8 @@ if __name__ == '__main__':
 
     """save config"""
     #TODO save config
-    #with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path_save}/{save_name}.json', 'w') as out_config:
-        #json.dump(args, out_config, indent = 4)
+    with open(f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_path_save}/{save_name}.json', 'w') as out_config:
+        json.dump(args, out_config, indent = 4)
 
     if model_name in ['BrainTranslator', 'BrainTranslatorNaive']:
         tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
