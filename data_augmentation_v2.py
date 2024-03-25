@@ -324,15 +324,15 @@ class ZuCo_dataset(Dataset):
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
                 print('[INFO] Augmenting Dataset by random sampling')
 
-                sampled_elements = self.inputs.copy()
+                #sampled_elements = self.inputs.copy()
 
-                #sampled_elements = random.sample(self.inputs, Augmentation_size)
+                sampled_elements = random.sample(self.inputs, Augmentation_size)
 
-                random.shuffle(sampled_elements)
+                #random.shuffle(sampled_elements)
 
-                number_of_augmented_samples = 0
+                #number_of_augmented_samples = 0
 
-
+                '''
                 while number_of_augmented_samples < Augmentation_size:
                     for input in sampled_elements:
                         input_sample_synthetic = generate_samples.generate_synthetic_samples(input, gen_model,
@@ -349,8 +349,8 @@ class ZuCo_dataset(Dataset):
                                                                                          EEG_word_level_embeddings)
                     if input_sample_synthetic is not None:
                         pass
-                        #self.inputs.append(input_sample_synthetic)
-                '''
+                        self.inputs.append(input_sample_synthetic)
+
 
             if augmenation_type == "TF-IDF-High" or augmenation_type == "TF-IDF-Medium" or augmenation_type == "TF-IDF-Low":
                 Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
