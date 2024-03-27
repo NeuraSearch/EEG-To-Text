@@ -132,9 +132,13 @@ if __name__ == '__main__':
 
 
 
-    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results/{task_name}-{model_name}-all_decoding_results.txt'
+
+    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results'
+    #output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results/{task_name}-{model_name}-all_decoding_results.txt'
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
+
+    output_all_results_path = output_all_results_path+f"/{task_name}-{model_name}-all_decoding_results.txt"
 
     ''' set random seeds '''
     seed_val = 312
