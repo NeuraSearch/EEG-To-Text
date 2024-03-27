@@ -348,7 +348,6 @@ class ZuCo_dataset(Dataset):
                                                                                          word_embeddings,
                                                                                          EEG_word_level_embeddings)
                     if input_sample_synthetic is not None:
-                        pass
                         self.inputs.append(input_sample_synthetic)
 
 
