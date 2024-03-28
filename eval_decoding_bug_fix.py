@@ -114,9 +114,9 @@ if __name__ == '__main__':
     training_config = json.load(open(args['config_path']))
 
     if 'TF-IDF-Low' in args['config_path']:
-        augmentation_type = 'TF-IDF-LOW'
+        augmentation_type = 'TF-IDF-Low'
     elif 'TF-IDF-High' in args['config_path']:
-        augmentation_type = 'TF-IDF-HIGH'
+        augmentation_type = 'TF-IDF-High'
     elif 'TF-IDF-Medium' in args['config_path']:
         augmentation_type = 'TF-IDF-Medium'
     else:
