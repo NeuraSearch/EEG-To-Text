@@ -113,18 +113,18 @@ if __name__ == '__main__':
     ''' load training config'''
     training_config = json.load(open(args['config_path']))
 
-    if args['config_path'].contains('TF-IDF-Low'):
+    if 'TF-IDF-Low' in args['config_path']:
         augmentation_type = 'TF-IDF-LOW'
-    elif args['config_path'].contains('TF-IDF-High'):
+    elif 'TF-IDF-High' in args['config_path']:
         augmentation_type = 'TF-IDF-HIGH'
-    elif args['config_path'].contains('TF-IDF-Medium'):
+    elif 'TF-IDF-Medium' in args['config_path']:
         augmentation_type = 'TF-IDF-Medium'
     else:
         augmentation_type = 'Random'
 
-    if args['config_path'].contains('Word_Level'):
+    if 'Word_Level' in args['config_path']:
         augmentation_level = 'Word_Level'
-    elif args['config_path'].contains('Sentence_Level'):
+    elif 'Sentence_Level' in args['config_path']:
         augmentation_level = 'Sentence_Level'
     else:
         augmentation_level = 'Contextual'
