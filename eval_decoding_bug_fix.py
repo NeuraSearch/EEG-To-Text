@@ -110,6 +110,22 @@ if __name__ == '__main__':
     ''' load training config'''
     training_config = json.load(open(args['config_path']))
 
+    if args['config_path'].contains('TF-IDF-Low'):
+        augmentation_type = 'TF-IDF-LOW'
+    elif args['config_path'].contains('TF-IDF-High'):
+        augmentation_type = 'TF-IDF-HIGH'
+    elif args['config_path'].contains('TF-IDF-Medium'):
+        augmentation_type = 'TF-IDF-Medium'
+    else:
+        augmentation_type = 'Random'
+
+    if args['config_path'].contains('Word_Level'):
+        augmentation_level = 'Word_Level'
+    elif args['config_path'].contains('Sentence_Level'):
+        augmentation_level = 'Sentence_Level'
+    else:
+        augmentation_level = 'Contextual'
+
     batch_size = 1
 
     subject_choice = training_config['subjects']
@@ -133,12 +149,15 @@ if __name__ == '__main__':
 
 
 
-    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results'
+    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/{augmentation_level}/{augmentation_type}/results'
     #output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results/{task_name}-{model_name}-all_decoding_results.txt'
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
 
     output_all_results_path = output_all_results_path+f"/{task_name}-{model_name}-all_decoding_results.txt"
+
+    if not os.path.exists(output_all_results_path):
+        os.makedirs(output_all_results_path)
 
     ''' set random seeds '''
     seed_val = 312
