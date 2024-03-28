@@ -157,10 +157,12 @@ if __name__ == '__main__':
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
 
-    output_all_results_path = output_all_results_path+f"/{task_name}-{model_name}-scores.txt"
-
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
+
+    output_all_results_path = output_all_results_path+f"/{task_name}-{model_name}-scores.txt"
+
+
 
     ''' set random seeds '''
     seed_val = 312
