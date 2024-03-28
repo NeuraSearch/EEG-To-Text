@@ -30,77 +30,80 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
     target_string_list = []
     pred_tokens_list = []
     pred_string_list = []
+    #with open(output_all_results_path, 'w') as f:
+    for input_embeddings, seq_len, input_masks, input_mask_invert, target_ids, target_mask, sentiment_labels, sent_level_EEG in \
+    dataloaders['test']:
+        # load in batch
+        input_embeddings_batch = input_embeddings.to(device).float()
+        input_masks_batch = input_masks.to(device)
+        target_ids_batch = target_ids.to(device)
+        input_mask_invert_batch = input_mask_invert.to(device)
+
+        target_tokens = tokenizer.convert_ids_to_tokens(target_ids_batch[0].tolist(), skip_special_tokens=True)
+        target_string = tokenizer.decode(target_ids_batch[0], skip_special_tokens=True)
+        # print('target ids tensor:',target_ids_batch[0])
+        # print('target ids:',target_ids_batch[0].tolist())
+        # print('target tokens:',target_tokens)
+        # print('target string:',target_string)
+        #f.write(f'target string: {target_string}\n')
+
+        # add to list for later calculate bleu metric
+        target_tokens_list.append([target_tokens])
+        target_string_list.append(target_string)
+
+        """replace padding ids in target_ids with -100"""
+        target_ids_batch[target_ids_batch == tokenizer.pad_token_id] = -100
+
+        # target_ids_batch_label = target_ids_batch.clone().detach()
+        # target_ids_batch_label[target_ids_batch_label == tokenizer.pad_token_id] = -100
+
+        predictions = model.generate(input_embeddings_batch, input_masks_batch, input_mask_invert_batch,
+                                     target_ids_batch,
+                                     max_length=256,
+                                     num_beams=1,
+                                     do_sample=False,
+                                     # num_beams=5,encoder_no_repeat_ngram_size =1,
+                                     # do_sample=True, top_k=15,temperature=0.5,num_return_sequences=5,
+                                     # early_stopping=True
+                                     )
+        predicted_string = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+        predicted_string = predicted_string[0]
+
+        predictions = tokenizer.encode(predicted_string)
+        # print('predicted string:',predicted_string)
+        #f.write(f'predicted string: {predicted_string}\n')
+        #f.write(f'################################################\n\n\n')
+
+        # convert to int list
+        #predictions = predictions.tolist()
+        truncated_prediction = []
+        for t in predictions:
+            if t != tokenizer.eos_token_id:
+                truncated_prediction.append(t)
+            else:
+                break
+        pred_tokens = tokenizer.convert_ids_to_tokens(truncated_prediction, skip_special_tokens=True)
+        # print('predicted tokens:',pred_tokens)
+        pred_tokens_list.append(pred_tokens)
+        pred_string_list.append(predicted_string)
+        # print('################################################')
+        # print()
+
     with open(output_all_results_path, 'w') as f:
-        for input_embeddings, seq_len, input_masks, input_mask_invert, target_ids, target_mask, sentiment_labels, sent_level_EEG in \
-        dataloaders['test']:
-            # load in batch
-            input_embeddings_batch = input_embeddings.to(device).float()
-            input_masks_batch = input_masks.to(device)
-            target_ids_batch = target_ids.to(device)
-            input_mask_invert_batch = input_mask_invert.to(device)
+        """ calculate corpus bleu score """
+        weights_list = [(1.0,), (0.5, 0.5), (1. / 3., 1. / 3., 1. / 3.), (0.25, 0.25, 0.25, 0.25)]
+        for weight in weights_list:
+            # print('weight:',weight)
+            corpus_bleu_score = corpus_bleu(target_tokens_list, pred_tokens_list, weights=weight)
+            print(f'corpus BLEU-{len(list(weight))} score:', corpus_bleu_score)
+            f.write(f'corpus BLEU-{len(list(weight))} score: {corpus_bleu_score}\n')
 
-            target_tokens = tokenizer.convert_ids_to_tokens(target_ids_batch[0].tolist(), skip_special_tokens=True)
-            target_string = tokenizer.decode(target_ids_batch[0], skip_special_tokens=True)
-            # print('target ids tensor:',target_ids_batch[0])
-            # print('target ids:',target_ids_batch[0].tolist())
-            # print('target tokens:',target_tokens)
-            # print('target string:',target_string)
-            f.write(f'target string: {target_string}\n')
-
-            # add to list for later calculate bleu metric
-            target_tokens_list.append([target_tokens])
-            target_string_list.append(target_string)
-
-            """replace padding ids in target_ids with -100"""
-            target_ids_batch[target_ids_batch == tokenizer.pad_token_id] = -100
-
-            # target_ids_batch_label = target_ids_batch.clone().detach()
-            # target_ids_batch_label[target_ids_batch_label == tokenizer.pad_token_id] = -100
-
-            predictions = model.generate(input_embeddings_batch, input_masks_batch, input_mask_invert_batch,
-                                         target_ids_batch,
-                                         max_length=256,
-                                         num_beams=1,
-                                         do_sample=False,
-                                         # num_beams=5,encoder_no_repeat_ngram_size =1,
-                                         # do_sample=True, top_k=15,temperature=0.5,num_return_sequences=5,
-                                         # early_stopping=True
-                                         )
-            predicted_string = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-            predicted_string = predicted_string[0]
-
-            predictions = tokenizer.encode(predicted_string)
-            # print('predicted string:',predicted_string)
-            f.write(f'predicted string: {predicted_string}\n')
-            f.write(f'################################################\n\n\n')
-
-            # convert to int list
-            #predictions = predictions.tolist()
-            truncated_prediction = []
-            for t in predictions:
-                if t != tokenizer.eos_token_id:
-                    truncated_prediction.append(t)
-                else:
-                    break
-            pred_tokens = tokenizer.convert_ids_to_tokens(truncated_prediction, skip_special_tokens=True)
-            # print('predicted tokens:',pred_tokens)
-            pred_tokens_list.append(pred_tokens)
-            pred_string_list.append(predicted_string)
-            # print('################################################')
-            # print()
-
-    """ calculate corpus bleu score """
-    weights_list = [(1.0,), (0.5, 0.5), (1. / 3., 1. / 3., 1. / 3.), (0.25, 0.25, 0.25, 0.25)]
-    for weight in weights_list:
-        # print('weight:',weight)
-        corpus_bleu_score = corpus_bleu(target_tokens_list, pred_tokens_list, weights=weight)
-        print(f'corpus BLEU-{len(list(weight))} score:', corpus_bleu_score)
-
-    print()
-    """ calculate rouge score """
-    rouge = Rouge()
-    rouge_scores = rouge.get_scores(pred_string_list, target_string_list, avg=True)
-    print(rouge_scores)
+        print()
+        """ calculate rouge score """
+        rouge = Rouge()
+        rouge_scores = rouge.get_scores(pred_string_list, target_string_list, avg=True)
+        print(rouge_scores)
+        f.write(f'ROUGE score: {rouge_scores}\n')
 
 
 if __name__ == '__main__':
@@ -154,7 +157,7 @@ if __name__ == '__main__':
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
 
-    output_all_results_path = output_all_results_path+f"/{task_name}-{model_name}-all_decoding_results.txt"
+    output_all_results_path = output_all_results_path+f"/{task_name}-{model_name}-scores.txt"
 
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
