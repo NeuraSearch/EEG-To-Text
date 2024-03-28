@@ -356,19 +356,21 @@ class ZuCo_dataset(Dataset):
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
                 print('[INFO] Augmenting Dataset by random sampling')
 
+                sampled_elements = random.sample(self.inputs, Augmentation_size)
                 tf_idf, threshold_1, threshold_2 = self.calc_sentence_tf_idf()
-                sampled_elements = self.inputs.copy()
 
-                random.shuffle(sampled_elements)
+                #sampled_elements = self.inputs.copy()
+
+                #random.shuffle(sampled_elements)
                 number_of_augmented_samples = 0
-                while number_of_augmented_samples < Augmentation_size:
-                    for input in sampled_elements:
-                        input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf(input, gen_model,
-                                                                                             word_embeddings,
-                                                                                             EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmenation_type)
-                        if input_sample_synthetic is not None:
-                            self.inputs.append(input_sample_synthetic)
-                            number_of_augmented_samples += 1
+
+                for input in sampled_elements:
+                    input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf(input, gen_model,
+                                                                                         word_embeddings,
+                                                                                         EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmenation_type)
+                    if input_sample_synthetic is not None:
+                        self.inputs.append(input_sample_synthetic)
+                        number_of_augmented_samples += 1
 
     def __len__(self):
         return len(self.inputs)
