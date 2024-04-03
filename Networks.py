@@ -1135,9 +1135,8 @@ class GeneratorACGAN_v2(nn.Module):
         return z
 
 def get_generator_model(Model_name, z_size, word_embedding_dim):
-    print("Model_name:", Model_name)
 
-    if Model_name == 'WGAN_v1_Text' or "BERT":
+    if Model_name == 'WGAN_v1_Text' or Model_name == "BERT":
         return GeneratorWGAN_v1_Text(z_size, word_embedding_dim)
     if Model_name == 'DCGAN_v1':
         return GeneratorDCGAN_v1(z_size)
