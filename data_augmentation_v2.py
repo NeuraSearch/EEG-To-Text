@@ -221,14 +221,14 @@ class ZuCo_dataset(Dataset):
         z_size = 100
 
         if phase == 'train':
-            print("Generator name:", generator_name)
+            #print("Generator name:", generator_name)
             gen_model = Networks.get_generator_model(generator_name, z_size, word_embedding_dim)
             print(f'[INFO]loading generator model from /users/gxb18167/Datasets/Checkpoints/{generator_name}/{generator_path}')
             checkpoint = torch.load(
                 fr"/users/gxb18167/Datasets/Checkpoints/{generator_name}/{generator_path}",
                 map_location=device)
 
-            print(gen_model)
+            #print(gen_model)
             # Load the model's state_dict onto the CPU
             gen_model.load_state_dict(checkpoint['gen_model_state_dict'])
             gen_model.to(device)
