@@ -366,7 +366,7 @@ class ZuCo_dataset(Dataset):
                 #sampled_elements = self.inputs.copy()
 
                 #random.shuffle(sampled_elements)
-                number_of_augmented_samples = 0
+                #number_of_augmented_samples = 0
 
                 for input in sampled_elements:
                     input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf(input, gen_model,
@@ -374,7 +374,7 @@ class ZuCo_dataset(Dataset):
                                                                                          EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmenation_type)
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
-                        number_of_augmented_samples += 1
+                        #number_of_augmented_samples += 1
 
     def __len__(self):
         return len(self.inputs)
