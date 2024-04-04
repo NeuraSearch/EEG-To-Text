@@ -30,11 +30,16 @@ def create_noise(batch_size, z_size, mode_z):
     return input_z
 
 
-def generate_samples(g_model, input_z, input_t):
+def generate_samples(generator_name, g_model, input_z, input_t):
     # Create random noise as input to the generator
     # Generate samples using the generator model
-    with torch.no_grad():
-        g_output = g_model(input_z, input_t)
+
+    if generator_name == "DCGAN_v1" or generator_name == "DCGAN_v2" or generator_name == "WGAN_v1" or generator_name == "WGAN_v2":
+        with torch.no_grad():
+            g_output = g_model(input_z)
+    else:
+        with torch.no_grad():
+            g_output = g_model(input_z, input_t)
 
     return g_output
 
@@ -49,7 +54,7 @@ def calc_sentence_tf_idf(sentence, tf_idf):
     return sentence_level_tf_idf/len(sentence)
 
 
-def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
+def generate_synthetic_samples(generator_name, input_sample, gen_model, word_embeddings, EEG_word_level_embeddings):
     if torch.cuda.is_available():
         device = torch.device("cuda:0")
     else:
@@ -73,7 +78,8 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
         word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float)
         word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
 
-        g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
+
+        g_output = generate_samples(generator_name, gen_model, input_z, word_embedding_tensor)
         g_output = g_output.to('cpu')
 
         EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
@@ -98,7 +104,7 @@ def generate_synthetic_samples(input_sample, gen_model, word_embeddings, EEG_wor
     #return input_sample
 
 
-def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmentation_type):
+def generate_synthetic_samples_tf_idf(generator_name, input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmentation_type):
     if torch.cuda.is_available():
         device = torch.device("cuda:0")
     else:
@@ -127,7 +133,7 @@ def generate_synthetic_samples_tf_idf(input_sample, gen_model, word_embeddings, 
         word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float)
         word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
 
-        g_output = generate_samples(gen_model, input_z, word_embedding_tensor)
+        g_output = generate_samples(generator_name, gen_model, input_z, word_embedding_tensor)
         g_output = g_output.to('cpu')
 
         EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
