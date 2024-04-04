@@ -367,7 +367,6 @@ class ZuCo_dataset(Dataset):
 
                 #random.shuffle(sampled_elements)
                 #number_of_augmented_samples = 0
-v
                 for input in sampled_elements:
                     input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf(generator_name, input, gen_model,
                                                                                          word_embeddings,
