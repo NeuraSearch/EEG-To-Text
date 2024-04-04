@@ -358,7 +358,7 @@ class ZuCo_dataset(Dataset):
             if augmenation_type == "TF-IDF-High" or augmenation_type == "TF-IDF-Medium" or augmenation_type == "TF-IDF-Low":
                 Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
-                print('[INFO] Augmenting Dataset by random sampling')
+                print('[INFO] Augmenting Dataset by TF-IDF')
 
                 sampled_elements = random.sample(self.inputs, Augmentation_size)
                 tf_idf, threshold_1, threshold_2 = self.calc_sentence_tf_idf()
