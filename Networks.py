@@ -1144,4 +1144,6 @@ def get_generator_model(Model_name, z_size, word_embedding_dim):
         return GeneratorWGAN_v1(z_size)
     elif Model_name == "DCGAN_v1_Text":
         return GeneratorDCGAN_v1_Text(z_size, word_embedding_dim)
+    elif Model_name == "WGAN_v1_Text":
+        return GeneratorWGAN_v1_Text(z_size, word_embedding_dim)
 
