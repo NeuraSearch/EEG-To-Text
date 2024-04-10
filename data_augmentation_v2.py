@@ -201,7 +201,7 @@ class ZuCo_dataset(Dataset):
 
         return augmented_list
 
-    def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False, augmentation_factor = 20, generator_name = "WGAN_v1_Text", generator_path = "", augmenation_type = 'random'):
+    def __init__(self, input_dataset_dicts, phase, tokenizer, subject = 'ALL', eeg_type = 'GD', bands = ['_t1','_t2','_a1','_a2','_b1','_b2','_g1','_g2'], setting = 'unique_sent', is_add_CLS_token = False, augmentation_factor = 20, generator_name = "WGAN_v1_Text", generator_path = "", augmenation_type = 'random', text_embedding_type = "Word_Level"):
         self.inputs = []
         self.tokenizer = tokenizer
 
@@ -345,12 +345,12 @@ class ZuCo_dataset(Dataset):
                         if input_sample_synthetic is not None:
                             self.inputs.append(input_sample_synthetic)
                             number_of_augmented_samples += 1
-
                 '''
+
                 for input in sampled_elements:
                     input_sample_synthetic = generate_samples.generate_synthetic_samples(generator_name, input, gen_model,
                                                                                          word_embeddings,
-                                                                                         EEG_word_level_embeddings)
+                                                                                         EEG_word_level_embeddings, text_embedding_type)
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
 
@@ -373,7 +373,7 @@ class ZuCo_dataset(Dataset):
                                                                                          EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmenation_type)
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
-                        #number_of_augmented_samples += 1
+
 
     def __len__(self):
         return len(self.inputs)
