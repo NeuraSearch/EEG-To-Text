@@ -96,18 +96,33 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
         input_sample['input_embeddings'] = synthetic_EEG_samples
 
     elif text_embedding_type == "Contextual":
-
-
         synthetic_EEG_samples = []
+        input_embeddings_labels.insert(0, "SOS")
+
         for i in range(len(input_embeddings_labels)):
-            word = input_embeddings_labels[i]
-            if word not in word_embeddings:
+            current_word = input_embeddings_labels[i]
+            if current_word not in word_embeddings:
                 return None
 
-            word_embedding = word_embeddings[word]
-            input_z = create_noise(1, 100, "uniform").to(device)
+            if current_word != "SOS" and i != len(input_embeddings_labels) - 1:
+                prior_word = input_embeddings_labels[i - 1]
 
-            word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float)
+                current_word = input_embeddings_labels[i]
+
+                next_word = input_embeddings_labels[i + 1]
+
+                contextual_embedding = np.concatenate((word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
+
+            elif i == len(input_embeddings_labels) - 1:
+                prior_word = input_embeddings_labels[i - 1]
+                next_word = "SOS"
+                contextual_embedding = np.concatenate(
+                    (word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
+
+
+            input_z = create_noise(1, 150, "uniform").to(device)
+
+            word_embedding_tensor = torch.tensor(contextual_embedding, dtype=torch.float)
             word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
 
             g_output = generate_samples(generator_name, gen_model, input_z, word_embedding_tensor)
@@ -119,8 +134,6 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
             synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float).to(device)
             synthetic_sample = synthetic_sample.resize(840).to(device)
             synthetic_EEG_samples.append(synthetic_sample.to('cpu'))
-
-
 
     return input_sample
 
