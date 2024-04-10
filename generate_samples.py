@@ -53,7 +53,7 @@ def calc_sentence_tf_idf(sentence, tf_idf):
             return None
     return sentence_level_tf_idf/len(sentence)
 
-def embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device):
+def embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device, original_sample_list):
     if text_embedding_type == "Word_Level":
         synthetic_EEG_samples = []
         for word in input_embeddings_labels:
@@ -171,7 +171,7 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
     input_embeddings_labels = input_sample['input_embeddings_labels']
     original_sample_list = input_sample['input_embeddings']
 
-    synthetic_EEG_samples = embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device)
+    synthetic_EEG_samples = embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device, original_sample_list)
     input_sample['input_embeddings'] = synthetic_EEG_samples
 
     return input_sample
@@ -195,7 +195,7 @@ def generate_synthetic_samples_tf_idf(generator_name, input_sample, gen_model, w
     elif augmentation_type == "TF-IDF-High" and sentence_tf_idf < threshold_2:
         return None
 
-    synthetic_EEG_samples = embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device)
+    synthetic_EEG_samples = embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device, original_sample_list)
     input_sample['input_embeddings'] = synthetic_EEG_samples
 
     return input_sample
