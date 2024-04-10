@@ -159,6 +159,14 @@ if __name__ == '__main__':
     model_name = args['model_name']
     generator_name = args['generator_name']
     generator_path = args['generator_path']
+
+    if "Word_Level" in generator_path:
+        text_embedding_type = 'Word_Level'
+    elif "Sentence_Level" in generator_path:
+        text_embedding_type = 'Sentence_Level'
+    else:
+        text_embedding_type = 'Contextual'
+
     # model_name = 'BrainTranslatorNaive' # with no additional transformers
     # model_name = 'BrainTranslator'
 
