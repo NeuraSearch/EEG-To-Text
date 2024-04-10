@@ -95,6 +95,32 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
 
         input_sample['input_embeddings'] = synthetic_EEG_samples
 
+    elif text_embedding_type == "Contextual":
+
+
+        synthetic_EEG_samples = []
+        for i in range(len(input_embeddings_labels)):
+            word = input_embeddings_labels[i]
+            if word not in word_embeddings:
+                return None
+
+            word_embedding = word_embeddings[word]
+            input_z = create_noise(1, 100, "uniform").to(device)
+
+            word_embedding_tensor = torch.tensor(word_embedding, dtype=torch.float)
+            word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
+
+            g_output = generate_samples(generator_name, gen_model, input_z, word_embedding_tensor)
+            g_output = g_output.to('cpu')
+
+            EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
+                EEG_word_level_embeddings)
+
+            synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float).to(device)
+            synthetic_sample = synthetic_sample.resize(840).to(device)
+            synthetic_EEG_samples.append(synthetic_sample.to('cpu'))
+
+
 
     return input_sample
 
