@@ -98,7 +98,6 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
     elif text_embedding_type == "Contextual":
         synthetic_EEG_samples = []
         input_embeddings_labels.insert(0, "SOS")
-
         for i in range(len(input_embeddings_labels)):
             current_word = input_embeddings_labels[i]
             if current_word not in word_embeddings:
@@ -106,11 +105,8 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
 
             if current_word != "SOS" and i != len(input_embeddings_labels) - 1:
                 prior_word = input_embeddings_labels[i - 1]
-
                 current_word = input_embeddings_labels[i]
-
                 next_word = input_embeddings_labels[i + 1]
-
                 contextual_embedding = np.concatenate((word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
 
             elif i == len(input_embeddings_labels) - 1:
