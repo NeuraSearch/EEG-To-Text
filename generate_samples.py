@@ -109,8 +109,7 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
                 contextual_embedding = np.concatenate(
                     (word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
 
-
-            input_z = create_noise(1, 150, "uniform").to(device)
+            input_z = create_noise(1, 100, "uniform").to(device)
 
             word_embedding_tensor = torch.tensor(contextual_embedding, dtype=torch.float)
             word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
@@ -125,6 +124,43 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
             synthetic_sample = synthetic_sample.resize(840).to(device)
             synthetic_EEG_samples.append(synthetic_sample.to('cpu'))
 
+    elif text_embedding_type == "Sentence_Level":
+        max_sentence_length = 57
+        synthetic_EEG_samples = []
+        input_embeddings_labels.insert(0, "SOS")
+        Sentence_embeddings = []
+        for i in range(len(input_embeddings_labels)):
+            word = input_embeddings_labels[i]
+            if word not in word_embeddings:
+                return None
+            else:
+                Sentence_embeddings.append(word_embeddings[word])
+
+        if len(Sentence_embeddings) > max_sentence_length:
+            print("Sentence length is greater than 57")
+
+        for i in range(max_sentence_length - len(Sentence_embeddings)):
+            Sentence_embeddings.append(np.zeros((105, 8)))
+
+        Combined_Sentence = np.concatenate(Sentence_embeddings, axis=0)
+
+        input_z = create_noise(1, 100, "uniform").to(device)
+
+        word_embedding_tensor = torch.tensor(Combined_Sentence, dtype=torch.float)
+        word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
+
+        g_output = generate_samples(generator_name, gen_model, input_z, word_embedding_tensor)
+        g_output = g_output.to('cpu')
+
+        EEG_synthetic_denormalized = (g_output * np.max(np.abs(EEG_word_level_embeddings))) + np.mean(
+            EEG_word_level_embeddings)
+
+        synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float).to(device)
+        segments = torch.split(synthetic_sample[0], max_sentence_length, dim=1)
+        for i in range(len(input_embeddings_labels)):
+            synthetic_sample = segments[i+1]
+            synthetic_sample = synthetic_sample.resize(840).to(device)
+            synthetic_EEG_samples.append(synthetic_sample.to('cpu'))
 
 
     synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
