@@ -88,12 +88,6 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
             synthetic_sample = synthetic_sample.resize(840).to(device)
             synthetic_EEG_samples.append(synthetic_sample.to('cpu'))
 
-        synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
-        padding_samples = original_sample_list[len(synthetic_EEG_samples):]
-        padding_samples = padding_samples
-        synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
-
-        input_sample['input_embeddings'] = synthetic_EEG_samples
 
     elif text_embedding_type == "Contextual":
         synthetic_EEG_samples = []
@@ -130,6 +124,15 @@ def generate_synthetic_samples(generator_name, input_sample, gen_model, word_emb
             synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float).to(device)
             synthetic_sample = synthetic_sample.resize(840).to(device)
             synthetic_EEG_samples.append(synthetic_sample.to('cpu'))
+
+
+
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    padding_samples = padding_samples
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
+
+    input_sample['input_embeddings'] = synthetic_EEG_samples
 
     return input_sample
 
@@ -176,12 +179,12 @@ def generate_synthetic_samples_tf_idf(generator_name, input_sample, gen_model, w
             synthetic_EEG_samples.append(synthetic_sample)
 
 
-        synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
-        padding_samples = original_sample_list[len(synthetic_EEG_samples):]
-        padding_samples = padding_samples
-        synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    padding_samples = padding_samples
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
-        input_sample['input_embeddings'] = synthetic_EEG_samples
+    input_sample['input_embeddings'] = synthetic_EEG_samples
 
     return input_sample
 
