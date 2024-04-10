@@ -253,12 +253,14 @@ class ZuCo_dataset(Dataset):
                 EEG_word_level_embeddings = pickle.load(file)
                 EEG_word_level_labels = pickle.load(file)
 
+
+        z_size = 100
         if text_embedding_type == "Word_Level":
             word_embedding_dim = 50
-            z_size = 100
         elif text_embedding_type == "Contextual":
-            word_embedding_dim = 50
-            z_size = 150
+            word_embedding_dim = 150
+        elif text_embedding_type == "Sentence_Level":
+            word_embedding_dim = 2850
 
         if phase == 'train':
             #print("Generator name:", generator_name)
