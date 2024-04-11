@@ -82,7 +82,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
         input_embeddings_labels.insert(0, "SOS")
         for i in range(len(input_embeddings_labels)):
             current_word = input_embeddings_labels[i]
-            contextual_embedding = None
+            contextual_embedding = []
             if current_word not in word_embeddings:
                 return None
 
@@ -97,7 +97,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
                 contextual_embedding = np.concatenate(
                     (word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
 
-            if contextual_embedding != None:
+            if contextual_embedding != []:
                 input_z = create_noise(1, 100, "uniform").to(device)
 
                 print("Current Word: ", current_word)
