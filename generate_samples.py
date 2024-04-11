@@ -85,9 +85,8 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
             if current_word not in word_embeddings:
                 return None
 
-            if current_word != "SOS" and i != len(input_embeddings_labels) - 1:
+            elif current_word != "SOS" and i != len(input_embeddings_labels) - 1:
                 prior_word = input_embeddings_labels[i - 1]
-                current_word = input_embeddings_labels[i]
                 next_word = input_embeddings_labels[i + 1]
                 contextual_embedding = np.concatenate((word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
 
@@ -99,6 +98,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
 
             input_z = create_noise(1, 100, "uniform").to(device)
 
+            print("Current Word: ", current_word)
             word_embedding_tensor = torch.tensor(contextual_embedding, dtype=torch.float)
             word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
 
