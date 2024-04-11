@@ -97,9 +97,7 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
             # print('weight:',weight)
             corpus_bleu_score = corpus_bleu(target_tokens_list, pred_tokens_list, weights=weight)
             print(f'corpus BLEU-{len(list(weight))} score:', corpus_bleu_score)
-            writer = csv.writer(f)
-            writer.writerows(corpus_bleu_score)
-            #f.write(f'corpus BLEU-{len(list(weight))} score: {corpus_bleu_score}\n')
+            f.write(f'corpus BLEU-{len(list(weight))} score: {corpus_bleu_score}\n')
 
         print()
         """ calculate rouge score """
@@ -107,9 +105,9 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
         rouge_scores = rouge.get_scores(pred_string_list, target_string_list, avg=True)
         print(rouge_scores)
 
-        writer = csv.writer(f)
-        writer.writerows(rouge_scores)
-
+        #writer = csv.writer(f)
+        #writer.writerows(data)
+        f.write(f'ROUGE score: {rouge_scores}\n')
 
 
 if __name__ == '__main__':
