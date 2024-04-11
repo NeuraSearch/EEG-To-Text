@@ -134,7 +134,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
                 return None
             else:
                 Sentence_embeddings.append(word_embeddings[word])
-                print("Word Embedding size: ", word_embeddings[word].shape)
+                #print("Word Embedding size: ", word_embeddings[word].shape)
 
         if len(Sentence_embeddings) > max_sentence_length:
             print("Sentence length is greater than 57")
@@ -157,7 +157,12 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
             EEG_word_level_embeddings)
 
         synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float).to(device)
-        segments = torch.split(synthetic_sample[0], max_sentence_length, dim=1)
+        print("Synthetic Sample Size: ", synthetic_sample.size())
+        print("Synthetic Sample Size 0: ", synthetic_sample[0].size())
+
+        segments = torch.split(synthetic_sample, max_sentence_length, dim=1)
+
+
         for i in range(len(input_embeddings_labels)):
             synthetic_sample = segments[i+1]
             synthetic_sample = synthetic_sample.resize(840).to(device)
