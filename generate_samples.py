@@ -134,12 +134,14 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
                 return None
             else:
                 Sentence_embeddings.append(word_embeddings[word])
+                print("Word Embedding size: ", word_embeddings[word].shape)
 
         if len(Sentence_embeddings) > max_sentence_length:
             print("Sentence length is greater than 57")
 
         for i in range(max_sentence_length - len(Sentence_embeddings)):
-            Sentence_embeddings.append(np.zeros((105, 8)))
+            Sentence_embeddings.append(np.zeros(50))
+
 
         Combined_Sentence = np.concatenate(Sentence_embeddings, axis=0)
 
