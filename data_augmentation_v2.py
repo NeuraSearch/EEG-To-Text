@@ -264,7 +264,7 @@ class ZuCo_dataset(Dataset):
 
         if phase == 'train':
             #print("Generator name:", generator_name)
-            gen_model = Networks.get_generator_model(generator_name, z_size, word_embedding_dim)
+            gen_model = Networks.get_generator_model(generator_name, z_size, word_embedding_dim, text_embedding_type)
             print(f'[INFO]loading generator model from /users/gxb18167/Datasets/Checkpoints/{generator_name}/{generator_path}')
             checkpoint = torch.load(
                 fr"/users/gxb18167/Datasets/Checkpoints/{generator_name}/{generator_path}",

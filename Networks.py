@@ -1140,9 +1140,17 @@ class GeneratorACGAN_v2(nn.Module):
 
         return z
 
-def get_generator_model(Model_name, z_size, word_embedding_dim):
+def get_generator_model(Model_name, z_size, word_embedding_dim, text_embedding_type):
 
-    if Model_name == 'WGAN_v1_Text' or Model_name == "BERT":
+    if Model_name == 'DCGAN_v1_Text' and text_embedding_type == "Sentence_Level":
+        return GeneratorDCGAN_v1_Sentence(z_size, word_embedding_dim)
+    elif Model_name == 'WGAN_v1_Text' and text_embedding_type == "Sentence_Level":
+        return GeneratorWGAN_v1_Sentence(z_size, word_embedding_dim)
+    elif Model_name == 'DCGAN_v2_Text' and text_embedding_type == "Sentence_Level":
+        return GeneratorDCGAN_v2_Sentence(z_size, word_embedding_dim)
+    elif Model_name == 'WGAN_v2_Text' and text_embedding_type == "Sentence_Level":
+        return GeneratorWGAN_v2_Sentence(z_size, word_embedding_dim)
+    elif Model_name == 'WGAN_v1_Text' or Model_name == "BERT":
         return GeneratorWGAN_v1_Text(z_size, word_embedding_dim)
     elif Model_name == 'DCGAN_v1':
         return GeneratorDCGAN_v1(z_size)
