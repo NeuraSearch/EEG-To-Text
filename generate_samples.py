@@ -1,21 +1,10 @@
-import math
-from collections import Counter
 
-import torch
-import torch.nn as nn
 import sys
 import nltk
-import torch.nn.functional as F
-import torch
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
 import torch
 nltk.download('punkt')
-from gensim.models import Word2Vec
-from nltk.tokenize import word_tokenize
 sys.path.insert(0, '..')
-import pickle
-from torch.autograd import grad as torch_grad
 
 print(torch.__version__)
 print("GPU Available:", torch.cuda.is_available())
@@ -90,7 +79,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
                 prior_word = input_embeddings_labels[i - 1]
                 next_word = input_embeddings_labels[i + 1]
 
-                print("Current Word Embedding size", word_embeddings[current_word].shape)
+                #print("Current Word Embedding size", word_embeddings[current_word].shape)
 
                 contextual_embedding = np.concatenate((word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
 
@@ -98,7 +87,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
                 prior_word = input_embeddings_labels[i - 1]
                 next_word = "SOS"
 
-                print("Current Word Embedding size" , word_embeddings[current_word].shape)
+                #print("Current Word Embedding size" , word_embeddings[current_word].shape)
 
                 contextual_embedding = np.concatenate(
                     (word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
@@ -108,10 +97,10 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
 
                 #print("Current Word: ", current_word)
                 word_embedding_tensor = torch.tensor(contextual_embedding, dtype=torch.float)
-                print("Word Embedding Tensor: ", word_embedding_tensor.size())
+                #print("Word Embedding Tensor: ", word_embedding_tensor.size())
 
                 word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
-                print("Word Embedding Tensor: ", word_embedding_tensor.size())
+                #print("Word Embedding Tensor: ", word_embedding_tensor.size())
 
                 g_output = generate_samples(generator_name, gen_model, input_z, word_embedding_tensor)
                 g_output = g_output.to('cpu')
@@ -157,8 +146,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
             EEG_word_level_embeddings)
 
         synthetic_sample = torch.tensor(EEG_synthetic_denormalized[0][0], dtype=torch.float).to(device)
-        print("Synthetic Sample Size: ", synthetic_sample.size())
-        print("Synthetic Sample Size 0: ", synthetic_sample[0].size())
+
 
         segments = torch.split(synthetic_sample, 8, dim=1)
 
