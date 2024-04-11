@@ -160,7 +160,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
         print("Synthetic Sample Size: ", synthetic_sample.size())
         print("Synthetic Sample Size 0: ", synthetic_sample[0].size())
 
-        segments = torch.split(synthetic_sample, max_sentence_length, dim=1)
+        segments = torch.split(synthetic_sample, 8, dim=1)
 
 
         for i in range(len(input_embeddings_labels)):
