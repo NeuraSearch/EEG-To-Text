@@ -102,7 +102,10 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
 
                 #print("Current Word: ", current_word)
                 word_embedding_tensor = torch.tensor(contextual_embedding, dtype=torch.float)
+                print("Word Embedding Tensor: ", word_embedding_tensor.size())
+
                 word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
+                print("Word Embedding Tensor: ", word_embedding_tensor.size())
 
                 g_output = generate_samples(generator_name, gen_model, input_z, word_embedding_tensor)
                 g_output = g_output.to('cpu')

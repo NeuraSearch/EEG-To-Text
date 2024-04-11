@@ -382,9 +382,15 @@ class GeneratorDCGAN_v1_Text(nn.Module):
         noise = self.fc_noise(noise)
         noise = noise.view(noise.size(0), 1, 105, 8)
 
+        print("Noise:", noise.shape)
+        print("Word Embedding:", word_embedding.shape)
+
         # Process word embedding
         word_embedding = self.fc_word_embedding(word_embedding.to(self.device))
+        print("Word Embedding:", word_embedding.shape)
+
         word_embedding = word_embedding.view(word_embedding.size(0), 1, 105, 8)
+        print("Word Embedding:", word_embedding.shape)
 
         # Concatenate noise and word embedding
         combined_input = torch.cat([noise, word_embedding], dim=1)
