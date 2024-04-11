@@ -1,3 +1,4 @@
+import csv
 import os
 import numpy as np
 import torch
@@ -96,14 +97,19 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
             # print('weight:',weight)
             corpus_bleu_score = corpus_bleu(target_tokens_list, pred_tokens_list, weights=weight)
             print(f'corpus BLEU-{len(list(weight))} score:', corpus_bleu_score)
-            f.write(f'corpus BLEU-{len(list(weight))} score: {corpus_bleu_score}\n')
+            writer = csv.writer(f)
+            writer.writerows(corpus_bleu_score)
+            #f.write(f'corpus BLEU-{len(list(weight))} score: {corpus_bleu_score}\n')
 
         print()
         """ calculate rouge score """
         rouge = Rouge()
         rouge_scores = rouge.get_scores(pred_string_list, target_string_list, avg=True)
         print(rouge_scores)
-        f.write(f'ROUGE score: {rouge_scores}\n')
+
+        writer = csv.writer(f)
+        writer.writerows(rouge_scores)
+
 
 
 if __name__ == '__main__':
@@ -149,10 +155,18 @@ if __name__ == '__main__':
     # model_name = 'BrainTranslator'
     # model_name = 'BrainTranslatorNaive'
 
+    checkpoint_path = args['checkpoint_path']
+
+    path_elements = checkpoint_path.split("/")
+
+    last_folder = path_elements[-2]
+    file_name = path_elements[-1]
+
+    csv_file_path = file_name.replace('.json', '_results.csv')
 
 
 
-    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/{augmentation_level}/{augmentation_type}/results'
+    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/results/{last_folder}'
     #output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results/{task_name}-{model_name}-all_decoding_results.txt'
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
@@ -160,7 +174,7 @@ if __name__ == '__main__':
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
 
-    output_all_results_path = output_all_results_path+f"/{task_name}-{model_name}-scores.txt"
+    output_all_results_path = output_all_results_path+f"/{csv_file_path}"
 
 
 
@@ -215,7 +229,8 @@ if __name__ == '__main__':
     dataloaders = {'test': test_dataloader}
 
     ''' set up model '''
-    checkpoint_path = args['checkpoint_path']
+
+
     pretrained_bart = BartForConditionalGeneration.from_pretrained('facebook/bart-large')
 
     if model_name == 'BrainTranslator':
