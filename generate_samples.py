@@ -82,6 +82,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
         input_embeddings_labels.insert(0, "SOS")
         for i in range(len(input_embeddings_labels)):
             current_word = input_embeddings_labels[i]
+            contextual_embedding = None
             if current_word not in word_embeddings:
                 return None
 
