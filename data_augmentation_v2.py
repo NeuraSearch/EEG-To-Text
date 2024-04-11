@@ -278,9 +278,9 @@ class ZuCo_dataset(Dataset):
             gen_model.eval()
 
         if phase == 'train' and text_embedding_type == "Word_Level":
-            Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
+            Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, 50)
         elif phase == 'train' and text_embedding_type == "Contextual":
-            Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, word_embedding_dim)
+            Embedded_Word_labels, word_embeddings = self.create_word_label_embeddings(EEG_word_level_labels, 50)
 
 
         #change to increase or decrease the number of synthetic samples
