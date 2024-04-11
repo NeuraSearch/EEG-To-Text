@@ -100,7 +100,7 @@ def embedding_type_generation(text_embedding_type, input_embeddings_labels, word
             if contextual_embedding != []:
                 input_z = create_noise(1, 100, "uniform").to(device)
 
-                print("Current Word: ", current_word)
+                #print("Current Word: ", current_word)
                 word_embedding_tensor = torch.tensor(contextual_embedding, dtype=torch.float)
                 word_embedding_tensor = word_embedding_tensor.unsqueeze(0)
 
