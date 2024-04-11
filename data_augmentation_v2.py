@@ -178,37 +178,6 @@ class ZuCo_dataset(Dataset):
 
         return Embedded_Word_labels, word_embeddings
 
-    def create_word_label_embeddings_contextual(self, Word_Labels_List, word_embedding_dim=50):
-        tokenized_words = []
-        EEG_word_level_labels = Word_Labels_List
-
-        for i in range(len(Word_Labels_List)):
-            tokenized_words.append([Word_Labels_List[i]])
-        model = Word2Vec(sentences=tokenized_words, vector_size=word_embedding_dim, window=5, min_count=1, workers=4)
-        word_embeddings = {word: model.wv[word] for word in model.wv.index_to_key}
-        Embedded_Word_labels = []
-
-        for words in range(0, len(EEG_word_level_labels)):
-            current_word = EEG_word_level_labels[words]
-            if current_word != "SOS" and words != len(EEG_word_level_labels) - 1:
-                prior_word = EEG_word_level_labels[words - 1]
-
-                current_word = EEG_word_level_labels[words]
-
-                next_word = EEG_word_level_labels[words + 1]
-
-                contextual_embedding = np.concatenate(
-                    (word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
-                Embedded_Word_labels.append(contextual_embedding)
-            elif words == len(EEG_word_level_labels) - 1:
-                prior_word = EEG_word_level_labels[words - 1]
-                next_word = "SOS"
-                contextual_embedding = np.concatenate(
-                    (word_embeddings[prior_word], word_embeddings[current_word], word_embeddings[next_word]), axis=-1)
-                Embedded_Word_labels.append(contextual_embedding)
-
-        return Embedded_Word_labels, word_embeddings
-
     def augment_list_balanced(self, original_list, augmentation_percentage, balance_factor=0.15):
         # Count the frequency of each word in the original list
         word_counts = {}
