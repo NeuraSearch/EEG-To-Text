@@ -226,13 +226,16 @@ def generate_synthetic_samples_ablation(generator_name, input_sample, gen_model,
             synthetic_EEG_samples.append(random_noise)
 
     elif ablation_type == "ablation_duplicate":
-        for word in input_embeddings_labels:
+        for i in range(len(input_embeddings_labels)):
+            word = input_embeddings_labels[i]
             if word not in word_embeddings:
                 return None
 
-        original_sample_list = input_sample['input_embeddings']
+            EEG_segment = original_sample_list[i]
 
-        synthetic_EEG_samples = original_sample_list
+            synthetic_EEG_samples.append(EEG_segment)
+
+
 
 
     synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
