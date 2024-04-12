@@ -386,7 +386,7 @@ class ZuCo_dataset(Dataset):
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
 
-            elif augmenation_type == "ablation_noise":
+            elif augmenation_type == "ablation_noise" or augmenation_type == "ablation_duplicate":
                 Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
                 print('[INFO] Augmenting Dataset by random sampling')
@@ -396,9 +396,9 @@ class ZuCo_dataset(Dataset):
                 sampled_elements = random.sample(self.inputs, Augmentation_size)
 
                 for input in sampled_elements:
-                    input_sample_synthetic = generate_samples.generate_synthetic_samples(generator_name, input, gen_model,
+                    input_sample_synthetic = generate_samples.generate_synthetic_samples_ablation(generator_name, input, gen_model,
                                                                                          word_embeddings,
-                                                                                         EEG_word_level_embeddings, text_embedding_type)
+                                                                                         EEG_word_level_embeddings, text_embedding_type, augmenation_type)
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
 

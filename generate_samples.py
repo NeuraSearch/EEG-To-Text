@@ -206,21 +206,39 @@ def generate_synthetic_samples_tf_idf(generator_name, input_sample, gen_model, w
 
     return input_sample
 
-def generate_synthetic_samples_ablation(generator_name, input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, text_embedding_type):
+def generate_synthetic_samples_ablation(generator_name, input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, text_embedding_type, ablation_type):
     input_embeddings_labels = input_sample['input_embeddings_labels']
+
     original_sample_list = input_sample['input_embeddings']
 
     synthetic_EEG_samples = []
-    for word in input_embeddings_labels:
-        if word not in word_embeddings:
-            return None
 
-        #word_embedding = word_embeddings[word]
-        #input_z = create_noise(1, 100, "uniform").to(device)
+    if ablation_type == "ablation_noise":
+        for word in input_embeddings_labels:
+            if word not in word_embeddings:
+                return None
 
-        random_noise = torch.randn(1, 840)
+            #word_embedding = word_embeddings[word]
+            #input_z = create_noise(1, 100, "uniform").to(device)
 
-        synthetic_EEG_samples.append(random_noise)
+            random_noise = torch.randn(1, 840)
+
+            synthetic_EEG_samples.append(random_noise)
+
+    elif ablation_type == "ablation_duplicate":
+        for word in input_embeddings_labels:
+            if word not in word_embeddings:
+                return None
+
+        original_sample_list = input_sample['input_embeddings']
+
+        synthetic_EEG_samples = original_sample_list
+
+
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    padding_samples = padding_samples
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
     input_sample['input_embeddings'] = synthetic_EEG_samples
 
