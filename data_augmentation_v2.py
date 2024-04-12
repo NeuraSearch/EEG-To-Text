@@ -423,7 +423,7 @@ class ZuCo_dataset(Dataset):
                     for input in sampled_elements:
                         input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf_ablation(input,
                                                                                              word_embeddings,
-                                                                                             tf_idf, threshold_1, threshold_2, augmenation_type, text_embedding_type)
+                                                                                             tf_idf, threshold_1, threshold_2, augmenation_type, ablation_type)
                         if input_sample_synthetic is not None:
                             self.inputs.append(input_sample_synthetic)
 

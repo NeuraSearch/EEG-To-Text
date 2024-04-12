@@ -273,7 +273,6 @@ def generate_synthetic_samples_tf_idf_ablation(input_sample, word_embeddings, tf
             # input_z = create_noise(1, 100, "uniform").to(device)
 
             random_noise = torch.randn(840)
-
             synthetic_EEG_samples.append(random_noise)
 
     elif "ablation_duplicate" in ablation_type:
@@ -292,7 +291,6 @@ def generate_synthetic_samples_tf_idf_ablation(input_sample, word_embeddings, tf
     print("Synthetic EEG Samples: ", synthetic_EEG_samples[0].size())
 
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
-
 
     #synthetic_EEG_samples = embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device, original_sample_list)
     input_sample['input_embeddings'] = synthetic_EEG_samples
