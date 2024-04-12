@@ -238,6 +238,9 @@ def generate_synthetic_samples_ablation(input_sample, word_embeddings, ablation_
     synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
     padding_samples = original_sample_list[len(synthetic_EEG_samples):]
     padding_samples = padding_samples
+
+    print("Synthetic EEG Samples: ", synthetic_EEG_samples[0].size())
+
     synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
     input_sample['input_embeddings'] = synthetic_EEG_samples
