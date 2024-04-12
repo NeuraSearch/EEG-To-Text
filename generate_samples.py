@@ -285,6 +285,13 @@ def generate_synthetic_samples_tf_idf_ablation(input_sample, word_embeddings, tf
             EEG_segment = original_sample_list[i]
             synthetic_EEG_samples.append(EEG_segment)
 
+    synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
+    padding_samples = original_sample_list[len(synthetic_EEG_samples):]
+    padding_samples = padding_samples
+
+    print("Synthetic EEG Samples: ", synthetic_EEG_samples[0].size())
+
+    synthetic_EEG_samples = torch.cat((synthetic_EEG_samples, padding_samples), 0)
 
 
     #synthetic_EEG_samples = embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device, original_sample_list)
