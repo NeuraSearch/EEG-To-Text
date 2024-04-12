@@ -386,21 +386,47 @@ class ZuCo_dataset(Dataset):
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
 
-            elif augmenation_type == "ablation_noise" or augmenation_type == "ablation_duplicate":
-                Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
-                print('[INFO] Augmenting Dataset by:', Augmentation_size)
-                print('[INFO] Augmenting Dataset by random sampling')
+            elif "ablation_noise" in augmenation_type or "ablation_duplicate" in augmenation_type:
+                if "ablation_noise" in augmenation_type:
+                    ablation_type = "ablation_noise"
+                elif "ablation_duplicate" in augmenation_type:
+                    ablation_type = "ablation_duplicate"
 
-                # sampled_elements = self.inputs.copy()
+                if "random" in augmenation_type:
+                    Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
+                    print('[INFO] Augmenting Dataset by:', Augmentation_size)
+                    print('[INFO] Augmenting Dataset by random sampling')
 
-                sampled_elements = random.sample(self.inputs, Augmentation_size)
+                    # sampled_elements = self.inputs.copy()
 
-                for input in sampled_elements:
-                    input_sample_synthetic = generate_samples.generate_synthetic_samples_ablation(generator_name, input, gen_model,
-                                                                                         word_embeddings,
-                                                                                         EEG_word_level_embeddings, text_embedding_type, augmenation_type)
-                    if input_sample_synthetic is not None:
-                        self.inputs.append(input_sample_synthetic)
+                    sampled_elements = random.sample(self.inputs, Augmentation_size)
+
+                    for input in sampled_elements:
+                        input_sample_synthetic = generate_samples.generate_synthetic_samples_ablation(input,
+                                                                                             word_embeddings,
+                                                                                             ablation_type)
+                        if input_sample_synthetic is not None:
+                            self.inputs.append(input_sample_synthetic)
+
+                elif "TF-IDF-High" in augmenation_type or "TF-IDF-Medium" in augmenation_type or "TF-IDF-Low" in augmenation_type:
+                    Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
+                    print('[INFO] Augmenting Dataset by:', Augmentation_size)
+                    print('[INFO] Augmenting Dataset by TF-IDF')
+
+                    sampled_elements = random.sample(self.inputs, Augmentation_size)
+                    tf_idf, threshold_1, threshold_2 = self.calc_sentence_tf_idf()
+
+                    # sampled_elements = self.inputs.copy()
+
+                    # random.shuffle(sampled_elements)
+                    # number_of_augmented_samples = 0
+                    for input in sampled_elements:
+                        input_sample_synthetic = generate_samples.generate_synthetic_samples_tf_idf_ablation(input,
+                                                                                             word_embeddings,
+                                                                                             tf_idf, threshold_1, threshold_2, augmenation_type, text_embedding_type)
+                        if input_sample_synthetic is not None:
+                            self.inputs.append(input_sample_synthetic)
+
 
 
 

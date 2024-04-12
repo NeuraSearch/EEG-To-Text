@@ -206,14 +206,14 @@ def generate_synthetic_samples_tf_idf(generator_name, input_sample, gen_model, w
 
     return input_sample
 
-def generate_synthetic_samples_ablation(generator_name, input_sample, gen_model, word_embeddings, EEG_word_level_embeddings, text_embedding_type, ablation_type):
+def generate_synthetic_samples_ablation(input_sample, word_embeddings, ablation_type):
     input_embeddings_labels = input_sample['input_embeddings_labels']
 
     original_sample_list = input_sample['input_embeddings']
 
     synthetic_EEG_samples = []
 
-    if ablation_type == "ablation_noise":
+    if "ablation_noise" in ablation_type:
         for word in input_embeddings_labels:
             if word not in word_embeddings:
                 return None
@@ -225,7 +225,7 @@ def generate_synthetic_samples_ablation(generator_name, input_sample, gen_model,
 
             synthetic_EEG_samples.append(random_noise)
 
-    elif ablation_type == "ablation_duplicate":
+    elif "ablation_duplicate" in ablation_type:
         for i in range(len(input_embeddings_labels)):
             word = input_embeddings_labels[i]
             if word not in word_embeddings:
@@ -234,9 +234,6 @@ def generate_synthetic_samples_ablation(generator_name, input_sample, gen_model,
             EEG_segment = original_sample_list[i]
 
             synthetic_EEG_samples.append(EEG_segment)
-
-
-
 
     synthetic_EEG_samples = torch.stack(synthetic_EEG_samples)
     padding_samples = original_sample_list[len(synthetic_EEG_samples):]
@@ -247,6 +244,50 @@ def generate_synthetic_samples_ablation(generator_name, input_sample, gen_model,
 
     return input_sample
 
+
+def generate_synthetic_samples_tf_idf_ablation(input_sample, word_embeddings, tf_idf, threshold_1, threshold_2, augmentation_type, ablation_type):
+
+    input_embeddings_labels = input_sample['input_embeddings_labels']
+    original_sample_list = input_sample['input_embeddings']
+
+    sentence_tf_idf = calc_sentence_tf_idf(input_embeddings_labels, tf_idf)
+
+    if "TF-IDF-Low" in augmentation_type and sentence_tf_idf > threshold_1:
+        return None
+    elif augmentation_type == "TF-IDF-Medium" and sentence_tf_idf < threshold_1 and sentence_tf_idf > threshold_2:
+        return None
+    elif augmentation_type == "TF-IDF-High" and sentence_tf_idf < threshold_2:
+        return None
+
+    synthetic_EEG_samples = []
+
+    if "ablation_noise" in ablation_type:
+        for word in input_embeddings_labels:
+            if word not in word_embeddings:
+                return None
+
+            # word_embedding = word_embeddings[word]
+            # input_z = create_noise(1, 100, "uniform").to(device)
+
+            random_noise = torch.randn(1, 840)
+
+            synthetic_EEG_samples.append(random_noise)
+
+    elif "ablation_duplicate" in ablation_type:
+        for i in range(len(input_embeddings_labels)):
+            word = input_embeddings_labels[i]
+            if word not in word_embeddings:
+                return None
+
+            EEG_segment = original_sample_list[i]
+            synthetic_EEG_samples.append(EEG_segment)
+
+
+
+    #synthetic_EEG_samples = embedding_type_generation(text_embedding_type, input_embeddings_labels, word_embeddings, EEG_word_level_embeddings, generator_name, gen_model, device, original_sample_list)
+    input_sample['input_embeddings'] = synthetic_EEG_samples
+
+    return input_sample
 
 
 
