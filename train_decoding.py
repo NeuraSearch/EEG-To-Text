@@ -16,7 +16,7 @@ import copy
 from tqdm import tqdm
 from transformers import BertLMHeadModel, BartTokenizer, BartForConditionalGeneration, BartConfig, BartForSequenceClassification, BertTokenizer, BertConfig, BertForSequenceClassification, RobertaTokenizer, RobertaForSequenceClassification
 
-from data_augmentation import ZuCo_dataset
+from data_augmentation_v2 import ZuCo_dataset
 from model_decoding_bug_fix import BrainTranslator, BrainTranslatorNaive
 from config import get_config
 

@@ -169,9 +169,6 @@ if __name__ == '__main__':
     if not os.path.exists(output_all_results_path):
         os.makedirs(output_all_results_path)
 
-    if not os.path.exists(output_all_results_path):
-        os.makedirs(output_all_results_path)
-
     output_all_results_path = output_all_results_path+f"/{csv_file_path}"
 
 
