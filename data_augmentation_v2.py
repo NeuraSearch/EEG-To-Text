@@ -367,7 +367,7 @@ class ZuCo_dataset(Dataset):
                         self.inputs.append(input_sample_synthetic)
 
 
-            if augmenation_type == "TF-IDF-High" or augmenation_type == "TF-IDF-Medium" or augmenation_type == "TF-IDF-Low":
+            elif augmenation_type == "TF-IDF-High" or augmenation_type == "TF-IDF-Medium" or augmenation_type == "TF-IDF-Low":
                 Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
                 print('[INFO] Augmenting Dataset by:', Augmentation_size)
                 print('[INFO] Augmenting Dataset by TF-IDF')
@@ -385,6 +385,24 @@ class ZuCo_dataset(Dataset):
                                                                                          EEG_word_level_embeddings, tf_idf, threshold_1, threshold_2, augmenation_type, text_embedding_type)
                     if input_sample_synthetic is not None:
                         self.inputs.append(input_sample_synthetic)
+
+            elif augmenation_type == "ablation_noise":
+                Augmentation_size = floor(int(len(self.inputs) / 100 * augmentation_factor))
+                print('[INFO] Augmenting Dataset by:', Augmentation_size)
+                print('[INFO] Augmenting Dataset by random sampling')
+
+                # sampled_elements = self.inputs.copy()
+
+                sampled_elements = random.sample(self.inputs, Augmentation_size)
+
+                for input in sampled_elements:
+                    input_sample_synthetic = generate_samples.generate_synthetic_samples(generator_name, input, gen_model,
+                                                                                         word_embeddings,
+                                                                                         EEG_word_level_embeddings, text_embedding_type)
+                    if input_sample_synthetic is not None:
+                        self.inputs.append(input_sample_synthetic)
+
+
 
 
     def __len__(self):
