@@ -221,7 +221,7 @@ def generate_synthetic_samples_ablation(input_sample, word_embeddings, ablation_
             #word_embedding = word_embeddings[word]
             #input_z = create_noise(1, 100, "uniform").to(device)
 
-            random_noise = torch.randn(1, 840)
+            random_noise = torch.randn(840)
 
             synthetic_EEG_samples.append(random_noise)
 
