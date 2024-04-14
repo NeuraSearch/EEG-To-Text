@@ -44,7 +44,7 @@ module load anaconda/python-3.9.7/2021.11
 #Modify the line below to run your program. This is an example
 #=========================================================
 
-python /users/gxb18167/EEG-To-Text/eval_decoding_bug_fix.py --generator Generation_size_Word_Level_batch_size_64_g_d_learning_rate2e-05_2e-05_word_embedding_dim_50_z_size_100_num_epochs_100_device_cuda:0_model_final --checkpoint Augment_v2_2_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent
+python /users/gxb18167/EEG-To-Text/eval_decoding_bug_fix.py --generator Generation_size_Word_Level_batch_size_64_g_d_learning_rate2e-05_2e-05_word_embedding_dim_50_z_size_100_num_epochs_100_device_cuda:0_model_final --checkpoint Augment_v2_2_TF-IDF-Medium_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent
 
 # Do not change the line below
 #=========================================================
