@@ -114,21 +114,31 @@ if __name__ == '__main__':
     ''' get args'''
     args = get_config('eval_decoding')
 
-    ''' load training config'''
-    training_config = json.load(open(args['config_path']))
+    generator = args['generator']
+    checkpoint = args['checkpoint']
 
-    if 'TF-IDF-Low' in args['config_path']:
+
+    config_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator}/{checkpoint}.json"
+    checkpoint_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator}/best/{checkpoint}.pt"
+
+    ''' load training config'''
+    training_config = json.load(open(config_path))
+
+
+
+
+    if 'TF-IDF-Low' in config_path:
         augmentation_type = 'TF-IDF-Low'
-    elif 'TF-IDF-High' in args['config_path']:
+    elif 'TF-IDF-High' in config_path:
         augmentation_type = 'TF-IDF-High'
-    elif 'TF-IDF-Medium' in args['config_path']:
+    elif 'TF-IDF-Medium' in config_path:
         augmentation_type = 'TF-IDF-Medium'
     else:
         augmentation_type = 'Random'
 
-    if 'Word_Level' in args['config_path']:
+    if 'Word_Level' in config_path:
         augmentation_level = 'Word_Level'
-    elif 'Sentence_Level' in args['config_path']:
+    elif 'Sentence_Level' in config_path:
         augmentation_level = 'Sentence_Level'
     else:
         augmentation_level = 'Contextual'
@@ -153,7 +163,7 @@ if __name__ == '__main__':
     # model_name = 'BrainTranslator'
     # model_name = 'BrainTranslatorNaive'
 
-    checkpoint_path = args['checkpoint_path']
+    checkpoint_path = checkpoint_path
 
     path_elements = checkpoint_path.split("/")
 
