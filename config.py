@@ -83,7 +83,7 @@ def get_config(case):
         # args config for evaluating EEG-To-Text decoder
         parser = argparse.ArgumentParser(description='Specify config args for evaluate EEG-To-Text decoder')
         parser.add_argument('-generator', '--generator', help='specify model checkpoint', required=True)
-        parser.add_argument('-checkpoint', '--checkpoint', help='specify model checkpoint' ,required=True)
+        parser.add_argument('-checkpoint', '--checkpoint', help='specify model checkpoint' ,required=False)
         parser.add_argument('-checkpoint_path', '--checkpoint_path', help='specify model checkpoint', required=False)
         parser.add_argument('-conf', '--config_path', help='specify training config json' ,required=False)
         parser.add_argument('-cuda', '--cuda', help='specify cuda device name, e.g. cuda:0, cuda:1, etc', default = 'cuda:0')
