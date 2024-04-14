@@ -112,32 +112,19 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
 
 if __name__ == '__main__':
     list_of_checkpoints = [
-    "Augment_v2_1_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_1_TF-IDF-High_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_1_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_1_TF-IDF-Low_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_1_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_1_TF-IDF-Medium_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_1_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_1_random_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_2_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_2_TF-IDF-High_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_2_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_2_TF-IDF-Low_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_2_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_2_TF-IDF-Medium_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_2_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_2_random_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_4_TF-IDF-High_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_4_TF-IDF-Low_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_4_TF-IDF-Medium_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_4_random_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent"
     ]
-
 
 
 
@@ -212,6 +199,7 @@ if __name__ == '__main__':
 
         output_all_results_path = output_all_results_path+f"/{csv_file_path}+{augmentation_level}+.txt"
 
+        print(f'[INFO]output_all_results_path: {output_all_results_path}')
 
 
         ''' set random seeds '''
