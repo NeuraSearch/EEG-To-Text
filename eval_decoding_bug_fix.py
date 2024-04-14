@@ -111,173 +111,174 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
 
 
 if __name__ == '__main__':
-    list_of_checkpoints = text_array = [
+    list_of_checkpoints = [
     "Augment_v2_1_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_1_TF-IDF-High_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_1_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_1_TF-IDF-Low_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_1_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_1_TF-IDF-Medium_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_1_ablation_noise_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_1_ablation_noise_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_1_ablation_noise_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_1_ablation_noise_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_1_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_1_random_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_2_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_2_TF-IDF-High_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_2_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_2_TF-IDF-Low_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_2_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_2_TF-IDF-Medium_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_2_ablation_noise_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_2_ablation_noise_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_2_ablation_noise_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_2_ablation_noise_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_2_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_2_random_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_4_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_TF-IDF-High_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_4_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_TF-IDF-Low_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
     "Augment_v2_4_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_TF-IDF-Medium_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_4_random_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent"
+    "Augment_v2_4_ablation_noise_TF-IDF-High_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_4_ablation_noise_TF-IDF-Low_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_4_ablation_noise_TF-IDF-Medium_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_4_ablation_noise_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_4_random_task1_task2_taskNRv2_finetune_DCGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent"
     ]
 
 
-    ''' get args'''
-    args = get_config('eval_decoding')
+    for value in list_of_checkpoints:
+        ''' get args'''
+        args = get_config('eval_decoding')
 
-    generator = args['generator']
-    checkpoint = args['checkpoint']
-
-
-    config_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator}/{checkpoint}.json"
-    checkpoint_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator}/best/{checkpoint}.pt"
-
-    ''' load training config'''
-    training_config = json.load(open(config_path))
+        generator = args['generator']
+        checkpoint = value
 
 
+        config_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator}/{checkpoint}.json"
+        checkpoint_path = f"/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator}/best/{checkpoint}.pt"
 
-
-    if 'TF-IDF-Low' in config_path:
-        augmentation_type = 'TF-IDF-Low'
-    elif 'TF-IDF-High' in config_path:
-        augmentation_type = 'TF-IDF-High'
-    elif 'TF-IDF-Medium' in config_path:
-        augmentation_type = 'TF-IDF-Medium'
-    else:
-        augmentation_type = 'Random'
-
-    if 'Word_Level' in config_path:
-        augmentation_level = 'Word_Level'
-    elif 'Sentence_Level' in config_path:
-        augmentation_level = 'Sentence_Level'
-    else:
-        augmentation_level = 'Contextual'
-
-    batch_size = 1
-
-    subject_choice = training_config['subjects']
-    print(f'[INFO]subjects: {subject_choice}')
-    eeg_type_choice = training_config['eeg_type']
-    print(f'[INFO]eeg type: {eeg_type_choice}')
-    bands_choice = training_config['eeg_bands']
-    print(f'[INFO]using bands: {bands_choice}')
-
-    dataset_setting = 'unique_sent'
-
-    task_name = training_config['task_name']
-
-    model_name = training_config['model_name']
-
-    model_name = training_config['model_name']
-    generator_name = training_config['generator_name']
-    # model_name = 'BrainTranslator'
-    # model_name = 'BrainTranslatorNaive'
-
-    checkpoint_path = checkpoint_path
-
-    path_elements = checkpoint_path.split("/")
-
-    last_folder = path_elements[-2]
-    file_name = path_elements[-1]
-
-    csv_file_path = file_name.replace('.pt', '')
+        ''' load training config'''
+        training_config = json.load(open(config_path))
 
 
 
-    output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/results/{last_folder}'
-    #output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results/{task_name}-{model_name}-all_decoding_results.txt'
-    if not os.path.exists(output_all_results_path):
-        os.makedirs(output_all_results_path)
 
-    output_all_results_path = output_all_results_path+f"/{csv_file_path}+{augmentation_level}+.txt"
+        if 'TF-IDF-Low' in config_path:
+            augmentation_type = 'TF-IDF-Low'
+        elif 'TF-IDF-High' in config_path:
+            augmentation_type = 'TF-IDF-High'
+        elif 'TF-IDF-Medium' in config_path:
+            augmentation_type = 'TF-IDF-Medium'
+        else:
+            augmentation_type = 'Random'
 
+        if 'Word_Level' in config_path:
+            augmentation_level = 'Word_Level'
+        elif 'Sentence_Level' in config_path:
+            augmentation_level = 'Sentence_Level'
+        else:
+            augmentation_level = 'Contextual'
 
+        batch_size = 1
 
-    ''' set random seeds '''
-    seed_val = 312
-    np.random.seed(seed_val)
-    torch.manual_seed(seed_val)
-    torch.cuda.manual_seed_all(seed_val)
+        subject_choice = training_config['subjects']
+        print(f'[INFO]subjects: {subject_choice}')
+        eeg_type_choice = training_config['eeg_type']
+        print(f'[INFO]eeg type: {eeg_type_choice}')
+        bands_choice = training_config['eeg_bands']
+        print(f'[INFO]using bands: {bands_choice}')
 
-    ''' set up device '''
-    # use cuda
-    if torch.cuda.is_available():
-        dev = args['cuda']
-    else:
-        dev = "cpu"
-    # CUDA_VISIBLE_DEVICES=0,1,2,3
-    device = torch.device(dev)
-    print(f'[INFO]using device {dev}')
+        dataset_setting = 'unique_sent'
 
-    ''' set up dataloader '''
-    whole_dataset_dicts = []
-    if 'task1' in task_name:
-        dataset_path_task1 = '/users/gxb18167/Datasets/ZuCo/task1-SR/pickle/task1-SR-dataset.pickle'
-        with open(dataset_path_task1, 'rb') as handle:
-            whole_dataset_dicts.append(pickle.load(handle))
-    if 'task2' in task_name:
-        dataset_path_task2 = '/users/gxb18167/Datasets/ZuCo/task2-NR/pickle/task2-NR-dataset.pickle'
-        with open(dataset_path_task2, 'rb') as handle:
-            whole_dataset_dicts.append(pickle.load(handle))
-    if 'task3' in task_name:
-        dataset_path_task3 = '/users/gxb18167/Datasets/ZuCo/task3-TSR/pickle/task3-TSR-dataset.pickle'
-        with open(dataset_path_task3, 'rb') as handle:
-            whole_dataset_dicts.append(pickle.load(handle))
-    if 'taskNRv2' in task_name:
-        dataset_path_taskNRv2 = '/users/gxb18167/Datasets/ZuCo/task2-NR-2.0/pickle/task2-NR-2.0-dataset.pickle'
-        with open(dataset_path_taskNRv2, 'rb') as handle:
-            whole_dataset_dicts.append(pickle.load(handle))
-    print()
+        task_name = training_config['task_name']
 
-    tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
+        model_name = training_config['model_name']
 
-    # test dataset
-    test_set = ZuCo_dataset(whole_dataset_dicts, 'test', tokenizer, subject=subject_choice, eeg_type=eeg_type_choice,
-                            bands=bands_choice, setting=dataset_setting)
+        model_name = training_config['model_name']
+        generator_name = training_config['generator_name']
+        # model_name = 'BrainTranslator'
+        # model_name = 'BrainTranslatorNaive'
 
-    dataset_sizes = {"test_set": len(test_set)}
-    print('[INFO]test_set size: ', len(test_set))
+        checkpoint_path = checkpoint_path
 
-    # dataloaders
-    test_dataloader = DataLoader(test_set, batch_size=1, shuffle=False, num_workers=4)
+        path_elements = checkpoint_path.split("/")
 
-    dataloaders = {'test': test_dataloader}
+        last_folder = path_elements[-2]
+        file_name = path_elements[-1]
 
-    ''' set up model '''
+        csv_file_path = file_name.replace('.pt', '')
 
 
-    pretrained_bart = BartForConditionalGeneration.from_pretrained('facebook/bart-large')
 
-    if model_name == 'BrainTranslator':
-        model = BrainTranslator(pretrained_bart, in_feature=105 * len(bands_choice), decoder_embedding_size=1024,
-                                additional_encoder_nhead=8, additional_encoder_dim_feedforward=2048)
-    elif model_name == 'BrainTranslatorNaive':
-        model = BrainTranslatorNaive(pretrained_bart, in_feature=105 * len(bands_choice), decoder_embedding_size=1024,
-                                     additional_encoder_nhead=8, additional_encoder_dim_feedforward=2048)
+        output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/results/{last_folder}'
+        #output_all_results_path = f'/users/gxb18167/Datasets/Checkpoints/train_decoding/{generator_name}/results/{task_name}-{model_name}-all_decoding_results.txt'
+        if not os.path.exists(output_all_results_path):
+            os.makedirs(output_all_results_path)
 
-    model.load_state_dict(torch.load(checkpoint_path))
-    #model.load_state_dict(torch.load(checkpoint_path, map_location=torch.device('cpu')))
-    model.to(device)
+        output_all_results_path = output_all_results_path+f"/{csv_file_path}+{augmentation_level}+.txt"
 
-    criterion = nn.CrossEntropyLoss()
 
-    ''' eval '''
-    eval_model(dataloaders, device, tokenizer, criterion, model, output_all_results_path=output_all_results_path)
+
+        ''' set random seeds '''
+        seed_val = 312
+        np.random.seed(seed_val)
+        torch.manual_seed(seed_val)
+        torch.cuda.manual_seed_all(seed_val)
+
+        ''' set up device '''
+        # use cuda
+        if torch.cuda.is_available():
+            dev = args['cuda']
+        else:
+            dev = "cpu"
+        # CUDA_VISIBLE_DEVICES=0,1,2,3
+        device = torch.device(dev)
+        print(f'[INFO]using device {dev}')
+
+        ''' set up dataloader '''
+        whole_dataset_dicts = []
+        if 'task1' in task_name:
+            dataset_path_task1 = '/users/gxb18167/Datasets/ZuCo/task1-SR/pickle/task1-SR-dataset.pickle'
+            with open(dataset_path_task1, 'rb') as handle:
+                whole_dataset_dicts.append(pickle.load(handle))
+        if 'task2' in task_name:
+            dataset_path_task2 = '/users/gxb18167/Datasets/ZuCo/task2-NR/pickle/task2-NR-dataset.pickle'
+            with open(dataset_path_task2, 'rb') as handle:
+                whole_dataset_dicts.append(pickle.load(handle))
+        if 'task3' in task_name:
+            dataset_path_task3 = '/users/gxb18167/Datasets/ZuCo/task3-TSR/pickle/task3-TSR-dataset.pickle'
+            with open(dataset_path_task3, 'rb') as handle:
+                whole_dataset_dicts.append(pickle.load(handle))
+        if 'taskNRv2' in task_name:
+            dataset_path_taskNRv2 = '/users/gxb18167/Datasets/ZuCo/task2-NR-2.0/pickle/task2-NR-2.0-dataset.pickle'
+            with open(dataset_path_taskNRv2, 'rb') as handle:
+                whole_dataset_dicts.append(pickle.load(handle))
+        print()
+
+        tokenizer = BartTokenizer.from_pretrained('facebook/bart-large')
+
+        # test dataset
+        test_set = ZuCo_dataset(whole_dataset_dicts, 'test', tokenizer, subject=subject_choice, eeg_type=eeg_type_choice,
+                                bands=bands_choice, setting=dataset_setting)
+
+        dataset_sizes = {"test_set": len(test_set)}
+        print('[INFO]test_set size: ', len(test_set))
+
+        # dataloaders
+        test_dataloader = DataLoader(test_set, batch_size=1, shuffle=False, num_workers=4)
+
+        dataloaders = {'test': test_dataloader}
+
+        ''' set up model '''
+
+
+        pretrained_bart = BartForConditionalGeneration.from_pretrained('facebook/bart-large')
+
+        if model_name == 'BrainTranslator':
+            model = BrainTranslator(pretrained_bart, in_feature=105 * len(bands_choice), decoder_embedding_size=1024,
+                                    additional_encoder_nhead=8, additional_encoder_dim_feedforward=2048)
+        elif model_name == 'BrainTranslatorNaive':
+            model = BrainTranslatorNaive(pretrained_bart, in_feature=105 * len(bands_choice), decoder_embedding_size=1024,
+                                         additional_encoder_nhead=8, additional_encoder_dim_feedforward=2048)
+
+        model.load_state_dict(torch.load(checkpoint_path))
+        #model.load_state_dict(torch.load(checkpoint_path, map_location=torch.device('cpu')))
+        model.to(device)
+
+        criterion = nn.CrossEntropyLoss()
+
+        ''' eval '''
+        eval_model(dataloaders, device, tokenizer, criterion, model, output_all_results_path=output_all_results_path)
