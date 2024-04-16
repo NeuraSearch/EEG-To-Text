@@ -113,9 +113,9 @@ def eval_model(dataloaders, device, tokenizer, criterion, model, output_all_resu
 if __name__ == '__main__':
     #"Augment_v2_2_random_task1_task2_taskNRv2_finetune_WGAN_v1_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent"
     list_of_checkpoints = [
-    "Augment_v2_5_random_task1_task2_taskNRv2_finetune_DCGAN_v2_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_10_random_task1_task2_taskNRv2_finetune_DCGAN_v2_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
-    "Augment_v2_15_random_task1_task2_taskNRv2_finetune_DCGAN_v2_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent"
+    "Augment_v2_5_ablation_noise_random_task1_task2_taskNRv2_finetune_DCGAN_v2_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_10_ablation_noise_random_task1_task2_taskNRv2_finetune_DCGAN_v2_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent",
+    "Augment_v2_15_ablation_noise_random_task1_task2_taskNRv2_finetune_DCGAN_v2_Text_skipstep1_b32_20_30_5e-05_5e-07_unique_sent"
     ]
 
 
