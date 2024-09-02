@@ -504,7 +504,7 @@ class ZuCo_dataset(Dataset):
             list_of_sentence_tf_idf.append(sum_of_sentence_tf_idf)
 
         data = np.array(list_of_sentence_tf_idf)
-        tertiles = np.percentile(data, [33.33, 66.67])
+
 
         threshold1 = tertiles[0]
         threshold2 = tertiles[1]
